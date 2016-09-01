@@ -1,0 +1,124 @@
+body {
+    margin: 0;
+    text-align: center;
+    color: #333;
+    font-family: sans-serif;
+}
+
+header {
+    display: block;
+    margin: 0 auto 12px auto;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #bbb;
+}
+
+h1#title {
+    font-weight: normal;
+    font-size: 30px;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+p#subtitle {
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    color: #555;
+}
+
+#container {
+    min-width: 300px;
+    max-width: 720px;
+    /*max-width: 256px;*/
+    margin: 0 auto;
+    padding: 16px;
+}
+
+header, div#container > ul {
+    max-width: 384px;
+}
+
+/*ul#files, ul#repolist {*/
+div#container > ul {
+    list-style-type: none;
+    text-align: left;
+    /*max-width: 256px;*/
+    padding: 0;
+    margin: 0 auto;
+}
+
+ul#repolist li {
+    margin-bottom: 8px;
+}
+
+ul#repolist div.reponame {
+    display: block;
+}
+
+ul#repolist p {
+    padding: 0;
+    margin: 0;
+    display: block;
+    font-size: 12px;
+    color: #222;
+}
+
+ul#repolist a:link, ul#repolist a:hover, ul#repolist a:visited, ul#repolist a:active {
+    color: #333;
+    display: inline-block;
+    font-size: 18px;
+}
+
+div.repoage {
+    float: right;
+    font-size: 12px;
+}
+
+div.reponew {
+    color: #080;
+}
+
+div.repomid {
+    color: #333;
+}
+
+div.repoold {
+    color: #777;
+}
+
+ul#files {
+    font-size: 12px;
+    font-family: monospace;
+}
+
+span.filemode {
+    margin-right: 1em;
+}
+
+ul#files li:hover {
+    background-color: #eee;
+}
+
+ul#files a:link, ul#files a:hover, ul#files a:visited, ul#files a:active {
+    font-weight: none;
+    text-decoration: none;
+    color: #333;
+}
+
+ul#files a:hover {
+    text-decoration: underline;
+}
+
+ul#files a.filedir {
+    font-weight: bold;
+}
+
+ul#files span.filesize {
+    float: right;
+}
+
+div#readme {
+    text-align: left;
+    font-size: 14px;
+}
