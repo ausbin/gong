@@ -1,11 +1,11 @@
 package main
 
 import (
-	"os"
+	git "github.com/libgit2/git2go"
+	"html/template"
 	"log"
 	"net/http"
-	"html/template"
-	git "github.com/libgit2/git2go"
+	"os"
 )
 
 func main() {
@@ -38,11 +38,11 @@ func main() {
 
 type ctx struct {
 	Name, Desc string
-	Files []*ctxfile
+	Files      []*ctxfile
 }
 
 type ctxfile struct {
-	Name string
+	Name  string
 	IsDir bool
 }
 
@@ -57,7 +57,7 @@ func handlerFactory(prefix string, templ *template.Template, repo *git.Repositor
 			return
 		}
 
-		templ.Execute(w, &ctx{"foo", "a test repository", files});
+		templ.Execute(w, &ctx{"foo", "a test repository", files})
 	})
 }
 
