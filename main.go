@@ -1,7 +1,6 @@
 package main
 
 import (
-	git "github.com/libgit2/git2go"
 	"html/template"
 	"log"
 	"net/http"
@@ -19,7 +18,7 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	repo, err := git.OpenRepository(os.Args[1])
+	repo, err := NewRepo(os.Args[1])
 
 	if err != nil {
 		log.Fatalln(err)
@@ -38,18 +37,13 @@ func main() {
 
 type ctx struct {
 	Name, Desc string
-	Files      []*ctxfile
+	Files      []*RepoFile
 }
 
-type ctxfile struct {
-	Name  string
-	IsDir bool
-}
-
-func handlerFactory(prefix string, templ *template.Template, repo *git.Repository) http.Handler {
+func handlerFactory(prefix string, templ *template.Template, repo *Repo) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		dir := r.URL.Path[len(prefix):]
-		files, err := ls(repo, "master", dir)
+		files, err := repo.ListFiles("master", dir)
 
 		if err != nil {
 			log.Println(err)
