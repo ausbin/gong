@@ -69,7 +69,10 @@ func (r *Repo) tree(branch, dir string) (tree *git.Tree, err error) {
 	// we have it. Otherwise, search the root tree for the tree of the
 	// desired directory
 	if dir != "" && dir != "/" {
+		// Remove leading slash because git2go doesn't accept it
+		dir = dir[1:]
 		log.Println(dir)
+
 		var entry *git.TreeEntry
 		entry, err = tree.EntryByPath(dir)
 
