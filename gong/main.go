@@ -27,9 +27,9 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.Handle("/tree/", handlerFactory("/tree/", templ, repo))
-	mux.HandleFunc("/style.css", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "static/style.css")
-	})
+	// Ideally, the downstream server (nginx, Apache, etc.) would handle
+	// requests to /static/ instead, but this is useful for testing.
+	mux.Handle("/static/", http.StripPrefix("/static", http.FileServer(http.Dir("static"))))
 	err = http.ListenAndServe(":8050", mux)
 
 	if err != nil {
