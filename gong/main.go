@@ -13,7 +13,7 @@ func main() {
 		log.Fatalln("you must pass only the path to a git repository")
 	}
 
-	templ, err := template.ParseFiles("template.html")
+	templ, err := template.ParseFiles("templates/template.html")
 
 	if err != nil {
 		log.Fatalln(err)
@@ -27,7 +27,7 @@ func main() {
 
 	http.Handle("/tree/", handlerFactory("/tree/", templ, repo))
 	http.HandleFunc("/style.css", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "style.css")
+		http.ServeFile(w, r, "static/style.css")
 	})
 	err = http.ListenAndServe(":8050", nil)
 
