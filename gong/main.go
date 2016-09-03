@@ -25,11 +25,12 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	http.Handle("/tree/", handlerFactory("/tree/", templ, repo))
-	http.HandleFunc("/style.css", func(w http.ResponseWriter, r *http.Request) {
+	mux := http.NewServeMux()
+	mux.Handle("/tree/", handlerFactory("/tree/", templ, repo))
+	mux.HandleFunc("/style.css", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "static/style.css")
 	})
-	err = http.ListenAndServe(":8050", nil)
+	err = http.ListenAndServe(":8050", mux)
 
 	if err != nil {
 		log.Fatalln(err)
