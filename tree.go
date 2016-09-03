@@ -25,7 +25,10 @@ func (th *TreeHandler) ServeHTTP (w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	th.templ.Execute(w, NewTreeContext("foo", "a test repository", files))
+	err = th.templ.Execute(w, NewTreeContext("foo", "a test repository", files))
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 type TreeContext struct {
