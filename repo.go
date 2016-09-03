@@ -10,18 +10,19 @@ import (
 )
 
 type Repo struct {
-	path string
-	repo *git.Repository
+	Name, Description string
+	path              string
+	repo              *git.Repository
 }
 
-func NewRepo(path string) (*Repo, error) {
+func NewRepo(name, description, path string) (*Repo, error) {
 	repo, err := git.OpenRepository(path)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &Repo{path, repo}, nil
+	return &Repo{name, description, path, repo}, nil
 }
 
 func (r *Repo) ListFiles(branch, dir string) (result []*RepoFile, err error) {

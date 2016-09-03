@@ -2,7 +2,6 @@ package main
 
 import (
 	"code.austinjadams.com/gong"
-	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -13,20 +12,20 @@ func main() {
 		log.Fatalln("you must pass only the path to a git repository")
 	}
 
-	templ, err := template.ParseFiles("templates/template.html")
+	templates, err := gong.LoadTemplates("templates")
 
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	repo, err := gong.NewRepo(os.Args[1])
+	repo, err := gong.NewRepo("gong", "a git repository viewer", os.Args[1])
 
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	mux := http.NewServeMux()
-	mux.Handle("/tree/", http.StripPrefix("/tree", gong.NewTreeHandler(repo, templ)))
+	mux.Handle("/tree/", http.StripPrefix("/tree", gong.NewTreeHandler(repo, templates["repo-tree"])))
 	// Ideally, the downstream server (nginx, Apache, etc.) would handle
 	// requests to /static/ instead, but this is useful for testing.
 	mux.Handle("/static/", http.StripPrefix("/static", http.FileServer(http.Dir("static"))))

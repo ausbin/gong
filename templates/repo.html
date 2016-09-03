@@ -1,0 +1,8 @@
+{{ define "title" }}{{ .Repo.Name }}{{ end }}
+{{ define "content" }}
+  <header>
+    <h1 id="title">{{ .Repo.Name }}</h1>
+    <p id="subtitle">{{ .Repo.Description }}</p>
+  </header>
+  {{ template "repo-body" . }}
+{{ end }}
