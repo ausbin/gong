@@ -2,7 +2,7 @@
 //
 // Handles invocation of git2go
 
-package main
+package gong
 
 import (
 	git "github.com/libgit2/git2go"

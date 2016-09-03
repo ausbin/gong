@@ -1,6 +1,7 @@
 package main
 
 import (
+	"code.austinjadams.com/gong"
 	"html/template"
 	"log"
 	"net/http"
@@ -18,7 +19,7 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	repo, err := NewRepo(os.Args[1])
+	repo, err := gong.NewRepo(os.Args[1])
 
 	if err != nil {
 		log.Fatalln(err)
@@ -37,10 +38,10 @@ func main() {
 
 type ctx struct {
 	Name, Desc string
-	Files      []*RepoFile
+	Files      []*gong.RepoFile
 }
 
-func handlerFactory(prefix string, templ *template.Template, repo *Repo) http.Handler {
+func handlerFactory(prefix string, templ *template.Template, repo *gong.Repo) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		dir := r.URL.Path[len(prefix):]
 		files, err := repo.ListFiles("master", dir)
