@@ -1,10 +1,10 @@
-package gong
+package templates
 
 import (
 	"html/template"
 )
 
-func LoadTemplates(dir string) (map[string]*template.Template, error) {
+func Load(dir string) (map[string]*template.Template, error) {
 	m := make(map[string]*template.Template)
 
 	layout, err := template.ParseFiles(dir + "/layout.html")

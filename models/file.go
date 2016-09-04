@@ -1,4 +1,4 @@
-package gong
+package models
 
 type RepoFile struct {
 	Name  string

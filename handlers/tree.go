@@ -1,17 +1,18 @@
-package gong
+package handlers
 
 import (
+	"code.austinjadams.com/gong/models"
 	"html/template"
 	"log"
 	"net/http"
 )
 
 type TreeHandler struct {
-	repo  *Repo
+	repo  *models.Repo
 	templ *template.Template
 }
 
-func NewTreeHandler(repo *Repo, templ *template.Template) *TreeHandler {
+func NewTreeHandler(repo *models.Repo, templ *template.Template) *TreeHandler {
 	return &TreeHandler{repo, templ}
 }
 
@@ -32,10 +33,10 @@ func (th *TreeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 type TreeContext struct {
-	Repo  *Repo
-	Files []*RepoFile
+	Repo  *models.Repo
+	Files []*models.RepoFile
 }
 
-func NewTreeContext(repo *Repo, files []*RepoFile) *TreeContext {
+func NewTreeContext(repo *models.Repo, files []*models.RepoFile) *TreeContext {
 	return &TreeContext{repo, files}
 }

@@ -2,7 +2,7 @@
 //
 // Handles invocation of git2go
 
-package gong
+package models
 
 import (
 	git "github.com/libgit2/git2go"
