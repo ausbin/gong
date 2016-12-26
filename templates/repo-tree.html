@@ -1,6 +1,8 @@
 {{ define "repo-body" }} 
   <ul id="files">
-    <li><span class="filemode">d---------</span><a class="filedir" href="..">..</a></li>
+    {{ if not .IsRoot }}
+        <li><span class="filemode">d---------</span><a class="filedir" href="..">..</a></li>
+    {{ end }}
     {{ range .Files }}
         <li><span class="filemode">{{ if .IsDir }}d{{ else }}-{{ end}}rw-r--r--</span><a {{ if .IsDir }}class="filedir" {{ end }}href="{{ .Name }}/">{{ .Name }}</a><span class="filesize">24</span></li>
     {{ end }}

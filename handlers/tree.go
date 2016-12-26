@@ -26,17 +26,18 @@ func (th *TreeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = th.templ.Execute(w, NewTreeContext(th.repo, files))
+	err = th.templ.Execute(w, NewTreeContext(th.repo, path == "/", files))
 	if err != nil {
 		log.Println(err)
 	}
 }
 
 type TreeContext struct {
-	Repo  *models.Repo
-	Files []*models.RepoFile
+	Repo   *models.Repo
+	IsRoot bool
+	Files  []*models.RepoFile
 }
 
-func NewTreeContext(repo *models.Repo, files []*models.RepoFile) *TreeContext {
-	return &TreeContext{repo, files}
+func NewTreeContext(repo *models.Repo, isRoot bool, files []*models.RepoFile) *TreeContext {
+	return &TreeContext{repo, isRoot, files}
 }
