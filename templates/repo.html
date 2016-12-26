@@ -3,6 +3,9 @@
   <header>
     <h1 id="title">{{ .Repo.Name }}</h1>
     <p id="subtitle">{{ .Repo.Description }}</p>
+    <nav>
+        <ul><li><a href="/tree/">browse</a></li><li><a href="/log/">log</a></li><li><a href="/releases/">releases</a></li></ul>
+    </nav>
   </header>
   {{ template "repo-body" . }}
 {{ end }}

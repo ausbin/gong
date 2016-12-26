@@ -3,13 +3,46 @@ body {
     text-align: center;
     color: #333;
     font-family: sans-serif;
+    font-size: 14px;
 }
 
 header {
     display: block;
     margin: 0 auto 12px auto;
-    padding-bottom: 4px;
+}
+
+header nav {
+    padding: 0;
+    margin: 8px 0;
+}
+
+header nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid #bbb;
     border-bottom: 1px solid #bbb;
+}
+
+header nav li {
+    display: inline-block;
+    width: 33.3333%;
+    padding: 0;
+    margin: 0;
+}
+
+header nav a {
+    padding: 4px 0;
+    margin: 0;
+    display: inline-block;
+    width: 100%;
+    color: #333;
+    text-decoration: none;
+}
+
+header nav a:hover {
+    background-color: #bbb;
+    color: #fff;
 }
 
 h1#title {
