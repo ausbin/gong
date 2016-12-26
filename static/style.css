@@ -29,6 +29,7 @@ header nav li {
     margin: 0;
     padding: 0;
     width: 33.3333%;
+    min-width: 64px;
 }
 
 header nav a {
@@ -63,7 +64,6 @@ p#subtitle {
 #container {
     margin: 0 auto;
     max-width: 720px;
-    min-width: 300px;
     padding: 16px;
 }
 
