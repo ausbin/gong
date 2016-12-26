@@ -25,7 +25,7 @@ func NewRepo(name, description, path string) (*Repo, error) {
 	return &Repo{name, description, path, repo}, nil
 }
 
-func (r *Repo) ListFiles(branch, dir string) (result []*RepoFile, err error) {
+func (r *Repo) ListFiles(branch, dir string) (result []RepoFile, err error) {
 	tree, err := r.tree(branch, dir)
 
 	if err != nil {
@@ -33,7 +33,7 @@ func (r *Repo) ListFiles(branch, dir string) (result []*RepoFile, err error) {
 	}
 
 	tree.Walk(func(_ string, entry *git.TreeEntry) int {
-		result = append(result, NewRepoFile(entry.Name, entry.Type == git.ObjectTree))
+		result = append(result, &repoFile{r.repo, entry})
 		return 1
 	})
 

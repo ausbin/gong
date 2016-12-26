@@ -4,7 +4,7 @@
         <li><span class="filemode">d---------</span><a class="filedir" href="..">..</a></li>
     {{ end }}
     {{ range .Files }}
-        <li><span class="filemode">{{ if .IsDir }}d{{ else }}-{{ end}}rw-r--r--</span><a {{ if .IsDir }}class="filedir" {{ end }}href="{{ .Name }}/">{{ .Name }}</a><span class="filesize">24</span></li>
+        <li><span class="filemode">{{ if .IsDir }}d{{ else }}-{{ end }}{{ if .IsExecutable }}rwxr-xr-x{{ else }}rw-r--r--{{ end }}</span><a {{ if .IsDir }}class="filedir" {{ end }}href="{{ .Name }}/">{{ .Name }}</a>{{ if .IsFile }}<span class="filesize">{{ .Size }}</span>{{ end }}</li>
     {{ end }}
   </ul>
   <div id="readme">

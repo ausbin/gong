@@ -35,9 +35,9 @@ func (th *TreeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 type TreeContext struct {
 	Repo   *models.Repo
 	IsRoot bool
-	Files  []*models.RepoFile
+	Files  []models.RepoFile
 }
 
-func NewTreeContext(repo *models.Repo, isRoot bool, files []*models.RepoFile) *TreeContext {
+func NewTreeContext(repo *models.Repo, isRoot bool, files []models.RepoFile) *TreeContext {
 	return &TreeContext{repo, isRoot, files}
 }
