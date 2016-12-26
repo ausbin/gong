@@ -1,9 +1,9 @@
 body {
-    margin: 0;
-    text-align: center;
     color: #333;
     font-family: sans-serif;
     font-size: 14px;
+    margin: 0;
+    text-align: center;
 }
 
 header {
@@ -12,32 +12,32 @@ header {
 }
 
 header nav {
-    padding: 0;
     margin: 8px 0;
+    padding: 0;
 }
 
 header nav ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    border-top: 1px solid #bbb;
     border-bottom: 1px solid #bbb;
+    border-top: 1px solid #bbb;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
 
 header nav li {
     display: inline-block;
-    width: 33.3333%;
-    padding: 0;
     margin: 0;
+    padding: 0;
+    width: 33.3333%;
 }
 
 header nav a {
-    padding: 4px 0;
-    margin: 0;
-    display: inline-block;
-    width: 100%;
     color: #333;
+    display: inline-block;
+    margin: 0;
+    padding: 4px 0;
     text-decoration: none;
+    width: 100%;
 }
 
 header nav a:hover {
@@ -46,25 +46,24 @@ header nav a:hover {
 }
 
 h1#title {
-    font-weight: normal;
+    color: #333;
     font-size: 30px;
+    font-weight: normal;
     margin: 0;
     padding: 0;
-    color: #333;
 }
 
 p#subtitle {
+    color: #555;
     font-size: 12px;
     margin: 0;
     padding: 0;
-    color: #555;
 }
 
 #container {
-    min-width: 300px;
-    max-width: 720px;
-    /*max-width: 256px;*/
     margin: 0 auto;
+    max-width: 720px;
+    min-width: 300px;
     padding: 16px;
 }
 
@@ -72,13 +71,11 @@ header, div#container > ul {
     max-width: 384px;
 }
 
-/*ul#files, ul#repolist {*/
 div#container > ul {
     list-style-type: none;
-    text-align: left;
-    /*max-width: 256px;*/
-    padding: 0;
     margin: 0 auto;
+    padding: 0;
+    text-align: left;
 }
 
 ul#repolist li {
@@ -90,11 +87,11 @@ ul#repolist div.reponame {
 }
 
 ul#repolist p {
-    padding: 0;
-    margin: 0;
+    color: #222;
     display: block;
     font-size: 12px;
-    color: #222;
+    margin: 0;
+    padding: 0;
 }
 
 ul#repolist a:link, ul#repolist a:hover, ul#repolist a:visited, ul#repolist a:active {
@@ -121,8 +118,8 @@ div.repoold {
 }
 
 ul#files {
-    font-size: 12px;
     font-family: monospace;
+    font-size: 12px;
 }
 
 span.filemode {
@@ -134,9 +131,9 @@ ul#files li:hover {
 }
 
 ul#files a:link, ul#files a:hover, ul#files a:visited, ul#files a:active {
+    color: #333;
     font-weight: none;
     text-decoration: none;
-    color: #333;
 }
 
 ul#files a:hover {
@@ -152,6 +149,6 @@ ul#files span.filesize {
 }
 
 div#readme {
-    text-align: left;
     font-size: 14px;
+    text-align: left;
 }
