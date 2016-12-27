@@ -117,35 +117,44 @@ div.repoold {
     color: #777;
 }
 
-ul#files {
+#files {
+    border-collapse: collapse;
     font-family: monospace;
     font-size: 12px;
+    margin: 0 auto;
+    text-align: left;
+    width: 100%;
 }
 
-span.filemode {
-    margin-right: 1em;
-}
-
-ul#files li:hover {
+#files tr:hover {
     background-color: #eee;
 }
 
-ul#files a:link, ul#files a:hover, ul#files a:visited, ul#files a:active {
+#files a {
     color: #333;
     font-weight: none;
     text-decoration: none;
 }
 
-ul#files a:hover {
+#files a:hover {
     text-decoration: underline;
 }
 
-ul#files a.filedir {
+#files td {
+    padding: 0;
+}
+
+#files td.filename {
+    padding: 0 8px;
+    width: 100%;
+}
+
+#files td.filedir {
     font-weight: bold;
 }
 
-ul#files span.filesize {
-    float: right;
+#files td.filesize {
+    text-align: right;
 }
 
 div#readme {
