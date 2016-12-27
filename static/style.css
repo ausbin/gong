@@ -12,6 +12,7 @@ header {
 }
 
 header nav {
+    font-size: 14px;
     margin: 8px 0;
     padding: 0;
 }
@@ -161,4 +162,19 @@ div#readme {
     font-size: 14px;
     overflow-x: auto;
     text-align: left;
+}
+
+@media (max-width: 500px) {
+    #files td.filename {
+        padding: 2px 0;
+        font-size: 1.25em;
+    }
+
+    #files td.filemode {
+        display: none;
+    }
+
+    #files td.filesize {
+        display: none;
+    }
 }
