@@ -1,8 +1,8 @@
 package models
 
 import (
-	"log"
 	git "github.com/libgit2/git2go"
+	"log"
 )
 
 type RepoFile interface {
@@ -15,7 +15,7 @@ type RepoFile interface {
 
 type repoFile struct {
 	// Need a reference to the repository to fetch file sizes
-	repo *git.Repository
+	repo  *git.Repository
 	entry *git.TreeEntry
 }
 
