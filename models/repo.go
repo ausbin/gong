@@ -6,7 +6,6 @@ package models
 
 import (
 	git "github.com/libgit2/git2go"
-	"log"
 )
 
 type Repo struct {
@@ -71,7 +70,6 @@ func (r *Repo) tree(branch, dir string) (tree *git.Tree, err error) {
 	if dir != "" && dir != "/" {
 		// Remove leading slash because git2go doesn't accept it
 		dir = dir[1:]
-		log.Println(dir)
 
 		var entry *git.TreeEntry
 		entry, err = tree.EntryByPath(dir)
