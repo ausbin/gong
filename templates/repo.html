@@ -4,9 +4,9 @@
     <h1 id="title">{{ .Repo.Name }}</h1>
     <p id="subtitle">{{ .Repo.Description }}</p>
     <nav>
-        <ul><li><a href="/tree/">browse</a></li><li><a href="/log/">log</a></li><li><a href="/releases/">releases</a></li></ul>
+        <ul><li><a href="/{{ .Repo.Name }}/tree/">browse</a></li><li><a href="/{{ .Repo.Name }}/log/">log</a></li><li><a href="/{{ .Repo.Name }}/refs/">releases</a></li></ul>
     </nav>
-    {{ template "repo-header" . }}
+    {{ block "repo-header" . }}{{ end }}
   </header>
-  {{ template "repo-body" . }}
+  {{ block "repo-body" . }}{{ end }}
 {{ end }}

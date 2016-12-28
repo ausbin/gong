@@ -33,8 +33,8 @@ func main() {
 
 	// Register repository paths
 	for _, repo := range cfg.Repos() {
-		path := "/" + repo.Name + "/tree"
-		mux.Handle(path+"/", http.StripPrefix(path, handlers.NewTree(repo, templates.Get("repo-tree"))))
+		repoHandler := handlers.NewRepo(repo, templates)
+		repoHandler.ConfigureMux(mux)
 	}
 
 	err = http.ListenAndServe(cfg.Global().BindInfo(), mux)

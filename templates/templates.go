@@ -6,4 +6,7 @@ var templatesToLoad = []loaderTempl{
 	{"layout", ""},
 	{"repo", "layout"},
 	{"repo-tree", "repo"},
+	{"repo-root", "repo-tree"},
+	{"repo-refs", "repo"},
+	{"repo-log", "repo"},
 }

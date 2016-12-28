@@ -7,16 +7,16 @@ import (
 	"net/http"
 )
 
-type Tree struct {
+type RepoTree struct {
 	repo  *models.Repo
 	templ *template.Template
 }
 
-func NewTree(repo *models.Repo, templ *template.Template) *Tree {
-	return &Tree{repo, templ}
+func NewRepoTree(repo *models.Repo, templ *template.Template) *RepoTree {
+	return &RepoTree{repo, templ}
 }
 
-func (th *Tree) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (th *RepoTree) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
 	files, err := th.repo.ListFiles("master", path)
 
@@ -26,18 +26,14 @@ func (th *Tree) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = th.templ.Execute(w, NewTreeContext(th.repo, path == "/", files))
+	err = th.templ.Execute(w, &repoTreeContext{th.repo, path == "/", files})
 	if err != nil {
 		log.Println(err)
 	}
 }
 
-type TreeContext struct {
+type repoTreeContext struct {
 	Repo   *models.Repo
 	IsRoot bool
 	Files  []models.RepoFile
-}
-
-func NewTreeContext(repo *models.Repo, isRoot bool, files []models.RepoFile) *TreeContext {
-	return &TreeContext{repo, isRoot, files}
 }
