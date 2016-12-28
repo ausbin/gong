@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 )
 
 func main() {
@@ -38,8 +37,7 @@ func main() {
 		mux.Handle(path+"/", http.StripPrefix(path, handlers.NewTree(repo, templates.Get("repo-tree"))))
 	}
 
-	bindTo := cfg.Global().Addr + ":" + strconv.FormatUint(uint64(cfg.Global().Port), 10)
-	err = http.ListenAndServe(bindTo, mux)
+	err = http.ListenAndServe(cfg.Global().BindInfo(), mux)
 
 	if err != nil {
 		log.Fatalln(err)

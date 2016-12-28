@@ -3,6 +3,7 @@ package config
 import (
 	"code.austinjadams.com/gong/models"
 	"gopkg.in/ini.v1"
+	"strconv"
 	"strings"
 )
 
@@ -29,6 +30,11 @@ type Global struct {
 	// Server configuration
 	PathPrefix  string
 	TemplateDir string
+}
+
+// Return address and port as an ADDR:PORT pair
+func (g *Global) BindInfo() string {
+	return g.Addr + ":" + strconv.FormatUint(uint64(g.Port), 10)
 }
 
 type parser struct {
