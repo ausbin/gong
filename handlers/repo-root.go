@@ -25,7 +25,7 @@ func (th *RepoRoot) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = th.templ.Execute(w, &repoRootContext{th.repo, true, files, template.HTML("this is the <em>readme</em>")})
+	err = th.templ.Execute(w, &repoRootContext{th.repo, true, "/", files, template.HTML("this is the <em>readme</em>")})
 	if err != nil {
 		log.Println(err)
 	}
@@ -34,6 +34,7 @@ func (th *RepoRoot) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 type repoRootContext struct {
 	Repo   *models.Repo
 	IsRoot bool
+	Path   string
 	Files  []models.RepoFile
 	Readme template.HTML
 }
