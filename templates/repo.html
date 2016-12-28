@@ -1,7 +1,7 @@
 {{ define "title" }}{{ .Repo.Name }}{{ end }}
 {{ define "content" }}
   <header>
-    <h1 id="title">{{ .Repo.Name }}</h1>
+    <h1 id="title"><a href="/{{ .Repo.Name }}/">{{ .Repo.Name }}</a></h1>
     <p id="subtitle">{{ .Repo.Description }}</p>
     <nav>
         <ul><li><a href="/{{ .Repo.Name }}/tree/">browse</a></li><li><a href="/{{ .Repo.Name }}/log/">log</a></li><li><a href="/{{ .Repo.Name }}/refs/">releases</a></li></ul>

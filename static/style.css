@@ -48,11 +48,19 @@ header nav a:hover {
 }
 
 h1#title {
-    color: #333;
     font-size: 30px;
     font-weight: normal;
     margin: 0;
     padding: 0;
+}
+
+h1#title a {
+    color: #333;
+    text-decoration: none;
+}
+
+h1#title a:hover {
+    text-decoration: underline;
 }
 
 p#subtitle {
