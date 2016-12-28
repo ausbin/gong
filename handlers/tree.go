@@ -7,16 +7,16 @@ import (
 	"net/http"
 )
 
-type TreeHandler struct {
+type Tree struct {
 	repo  *models.Repo
 	templ *template.Template
 }
 
-func NewTreeHandler(repo *models.Repo, templ *template.Template) *TreeHandler {
-	return &TreeHandler{repo, templ}
+func NewTree(repo *models.Repo, templ *template.Template) *Tree {
+	return &Tree{repo, templ}
 }
 
-func (th *TreeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (th *Tree) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
 	files, err := th.repo.ListFiles("master", path)
 
