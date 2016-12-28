@@ -1,2 +1,5 @@
 # built binary
 /gong/gong
+# custom configuration files
+/*.ini
+!/config.example.ini
