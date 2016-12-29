@@ -6,13 +6,13 @@ import (
 )
 
 type RepoLog interface {
-	Repo
-}
-
-type repoLog struct {
-	*repo
+	RepoGlobal
 }
 
 func NewRepoLog(url url.Reverser, repo *models.Repo) RepoLog {
-	return &repoLog{newRepo(url, repo)}
+	return &repoLog{NewRepoGlobal(url, repo)}
+}
+
+type repoLog struct {
+	RepoGlobal
 }

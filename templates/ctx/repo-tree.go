@@ -6,7 +6,7 @@ import (
 )
 
 type RepoTree interface {
-	Repo
+	RepoGlobal
 
 	IsRoot() bool
 	Path() string
@@ -14,11 +14,11 @@ type RepoTree interface {
 }
 
 func NewRepoTree(url url.Reverser, repo *models.Repo, isRoot bool, path string, files []models.RepoFile) RepoTree {
-	return newRepoTree(url, repo, isRoot, path, files)
+	return &repoTree{NewRepoGlobal(url, repo), isRoot, path, files}
 }
 
 type repoTree struct {
-	*repo
+	RepoGlobal
 
 	isRoot bool
 	path   string
@@ -28,7 +28,3 @@ type repoTree struct {
 func (t *repoTree) IsRoot() bool             { return t.isRoot }
 func (t *repoTree) Path() string             { return t.path }
 func (t *repoTree) Files() []models.RepoFile { return t.files }
-
-func newRepoTree(url url.Reverser, repo *models.Repo, isRoot bool, path string, files []models.RepoFile) *repoTree {
-	return &repoTree{newRepo(url, repo), isRoot, path, files}
-}

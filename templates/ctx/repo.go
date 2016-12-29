@@ -5,24 +5,22 @@ import (
 	"code.austinjadams.com/gong/templates/url"
 )
 
-type Repo interface {
+// Originally named Repo, but renamed to RepoGlobal to resolve conflict with
+// the embedded Repo object and the Repo() method in subclasses
+type RepoGlobal interface {
 	Global
 
 	Repo() *models.Repo
 }
 
-func NewRepo(url url.Reverser, repo *models.Repo) Repo {
-	return newRepo(url, repo)
+func NewRepoGlobal(url url.Reverser, repo *models.Repo) RepoGlobal {
+	return &repoGlobal{NewGlobal(url), repo}
 }
 
-type repo struct {
-	*global
+type repoGlobal struct {
+	Global
 
 	repo *models.Repo
 }
 
-func (r *repo) Repo() *models.Repo { return r.repo }
-
-func newRepo(url url.Reverser, repo_ *models.Repo) *repo {
-	return &repo{newGlobal(url), repo_}
-}
+func (r *repoGlobal) Repo() *models.Repo { return r.repo }

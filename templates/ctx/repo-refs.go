@@ -6,13 +6,13 @@ import (
 )
 
 type RepoRefs interface {
-	Repo
-}
-
-type repoRefs struct {
-	*repo
+	RepoGlobal
 }
 
 func NewRepoRefs(url url.Reverser, repo *models.Repo) RepoRefs {
-	return &repoRefs{newRepo(url, repo)}
+	return &repoRefs{NewRepoGlobal(url, repo)}
+}
+
+type repoRefs struct {
+	RepoGlobal
 }

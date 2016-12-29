@@ -14,18 +14,13 @@ type RepoRoot interface {
 
 func NewRepoRoot(url url.Reverser, repo *models.Repo, files []models.RepoFile,
 	readme template.HTML) RepoRoot {
-	return newRepoRoot(url, repo, files, readme)
+	return &repoRoot{NewRepoTree(url, repo, true, "/", files), readme}
 }
 
 type repoRoot struct {
-	*repoTree
+	RepoTree
 
 	readme template.HTML
 }
 
 func (r *repoRoot) Readme() template.HTML { return r.readme }
-
-func newRepoRoot(url url.Reverser, repo *models.Repo, files []models.RepoFile,
-	readme template.HTML) *repoRoot {
-	return &repoRoot{newRepoTree(url, repo, true, "/", files), readme}
-}

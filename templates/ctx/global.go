@@ -10,7 +10,7 @@ type Global interface {
 }
 
 func NewGlobal(url url.Reverser) Global {
-	return newGlobal(url)
+	return &global{url}
 }
 
 type global struct {
@@ -18,7 +18,3 @@ type global struct {
 }
 
 func (g *global) URL() url.Reverser { return g.url }
-
-func newGlobal(url url.Reverser) *global {
-	return &global{url}
-}
