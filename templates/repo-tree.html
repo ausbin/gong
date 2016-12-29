@@ -4,7 +4,7 @@
         <tr><td class="filemode">d---------</td><td class="filename filedir"><a href="..">..</a></td></tr>
     {{ end }}
     {{ range .Files }}
-        <tr><td class="filemode">{{ if .IsDir }}d{{ else }}-{{ end }}{{ if .IsExecutable }}rwxr-xr-x{{ else }}rw-r--r--{{ end }}</td><td class="filename {{ if .IsDir }}filedir{{ end }}"><a href="/{{ $.Repo.Name }}/tree{{ $.Path }}{{ .Name }}/">{{ .Name }}</a><td class="filesize">{{ if .IsFile }}{{ .Size }}{{ end }}</td></tr>
+        <tr><td class="filemode">{{ if .IsDir }}d{{ else }}-{{ end }}{{ if .IsExecutable }}rwxr-xr-x{{ else }}rw-r--r--{{ end }}</td><td class="filename {{ if .IsDir }}filedir{{ end }}"><a href="{{ $.URL.RepoTree $.Repo.Name (print $.Path .Name) .IsDir }}">{{ .Name }}</a><td class="filesize">{{ if .IsFile }}{{ .Size }}{{ end }}</td></tr>
     {{ end }}
   </table>
 {{ end }}

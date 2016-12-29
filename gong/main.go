@@ -31,9 +31,11 @@ func main() {
 	// requests to /static/ instead, but this is useful for testing.
 	mux.Handle("/static/", http.StripPrefix("/static", http.FileServer(http.Dir("static"))))
 
+	reverser := &reverser{root: "/", static: "/static/"}
+
 	// Register repository paths
 	for _, repo := range cfg.Repos() {
-		repoHandler := handlers.NewRepo(repo, templates)
+		repoHandler := handlers.NewRepo(reverser, repo, templates)
 		repoHandler.ConfigureMux(mux)
 	}
 

@@ -1,8 +1,13 @@
 package url
 
 type Reverser interface {
-	Root() string
+	RepoReverser
 
+	Root() string
+	Static(string) string
+}
+
+type RepoReverser interface {
 	RepoRoot(repo string) string
 	RepoTree(repo string, path string, isDir bool) string
 	RepoLog(repo string) string
