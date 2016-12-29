@@ -2,28 +2,27 @@ package handlers
 
 import (
 	"code.austinjadams.com/gong/models"
+	"code.austinjadams.com/gong/templates/ctx"
+	"code.austinjadams.com/gong/templates/url"
 	"html/template"
 	"log"
 	"net/http"
 )
 
 type RepoRefs struct {
+	url   url.Reverser
 	repo  *models.Repo
 	templ *template.Template
 }
 
-func NewRepoRefs(repo *models.Repo, templ *template.Template) *RepoRefs {
-	return &RepoRefs{repo, templ}
+func NewRepoRefs(url url.Reverser, repo *models.Repo, templ *template.Template) *RepoRefs {
+	return &RepoRefs{url, repo, templ}
 }
 
-func (th *RepoRefs) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	err := th.templ.Execute(w, &repoRefsContext{th.repo})
+func (rr *RepoRefs) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	err := rr.templ.Execute(w, ctx.NewRepoRefs(rr.url, rr.repo))
 
 	if err != nil {
 		log.Println(err)
 	}
-}
-
-type repoRefsContext struct {
-	Repo *models.Repo
 }

@@ -2,22 +2,25 @@ package handlers
 
 import (
 	"code.austinjadams.com/gong/models"
+	"code.austinjadams.com/gong/templates/ctx"
+	"code.austinjadams.com/gong/templates/url"
 	"html/template"
 	"log"
 	"net/http"
 )
 
 type RepoRoot struct {
+	url   url.Reverser
 	repo  *models.Repo
 	templ *template.Template
 }
 
-func NewRepoRoot(repo *models.Repo, templ *template.Template) *RepoRoot {
-	return &RepoRoot{repo, templ}
+func NewRepoRoot(url url.Reverser, repo *models.Repo, templ *template.Template) *RepoRoot {
+	return &RepoRoot{url, repo, templ}
 }
 
-func (th *RepoRoot) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	files, err := th.repo.ListFiles("master", "/")
+func (rr *RepoRoot) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	files, err := rr.repo.ListFiles("master", "/")
 
 	if err != nil {
 		log.Println(err)
@@ -25,16 +28,10 @@ func (th *RepoRoot) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = th.templ.Execute(w, &repoRootContext{th.repo, true, "/", files, template.HTML("this is the <em>readme</em>")})
+	ctx := ctx.NewRepoRoot(rr.url, rr.repo, files,
+		template.HTML("this is the <em>readme</em>"))
+	err = rr.templ.Execute(w, ctx)
 	if err != nil {
 		log.Println(err)
 	}
-}
-
-type repoRootContext struct {
-	Repo   *models.Repo
-	IsRoot bool
-	Path   string
-	Files  []models.RepoFile
-	Readme template.HTML
 }

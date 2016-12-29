@@ -2,23 +2,26 @@ package handlers
 
 import (
 	"code.austinjadams.com/gong/models"
+	"code.austinjadams.com/gong/templates/ctx"
+	"code.austinjadams.com/gong/templates/url"
 	"html/template"
 	"log"
 	"net/http"
 )
 
 type RepoTree struct {
+	url   url.Reverser
 	repo  *models.Repo
 	templ *template.Template
 }
 
-func NewRepoTree(repo *models.Repo, templ *template.Template) *RepoTree {
-	return &RepoTree{repo, templ}
+func NewRepoTree(url url.Reverser, repo *models.Repo, templ *template.Template) *RepoTree {
+	return &RepoTree{url, repo, templ}
 }
 
-func (th *RepoTree) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (rt *RepoTree) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// XXX Don't hardcode the path here
-	path := r.URL.Path[len("/"+th.repo.Name+"/tree"):]
+	path := r.URL.Path[len("/"+rt.repo.Name+"/tree"):]
 
 	// Redirect if path does not end in /
 	if path[len(path)-1] != '/' {
@@ -26,7 +29,7 @@ func (th *RepoTree) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	files, err := th.repo.ListFiles("master", path)
+	files, err := rt.repo.ListFiles("master", path)
 
 	if err != nil {
 		log.Println(err)
@@ -34,15 +37,9 @@ func (th *RepoTree) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = th.templ.Execute(w, &repoTreeContext{th.repo, path == "/", path, files})
+	ctx := ctx.NewRepoTree(rt.url, rt.repo, path == "/", path, files)
+	err = rt.templ.Execute(w, ctx)
 	if err != nil {
 		log.Println(err)
 	}
-}
-
-type repoTreeContext struct {
-	Repo   *models.Repo
-	IsRoot bool
-	Path   string
-	Files  []models.RepoFile
 }
