@@ -28,8 +28,10 @@ type Global struct {
 	Addr string
 	Port uint
 	// Server configuration
-	PathPrefix  string
-	TemplateDir string
+	PathPrefix   string
+	StaticPrefix string
+	StaticDir    string
+	TemplateDir  string
 }
 
 // Return address and port as an ADDR:PORT pair
@@ -67,10 +69,12 @@ func (p *parser) parseGlobal() error {
 	section, _ := p.cfg.GetSection("")
 
 	p.global = &Global{
-		Addr:        section.Key("addr").MustString("127.0.0.1"),
-		Port:        section.Key("port").MustUint(8050),
-		PathPrefix:  strings.TrimSuffix(section.Key("path_prefix").MustString("/"), "/"),
-		TemplateDir: section.Key("template_dir").MustString("templates"),
+		Addr:         section.Key("addr").MustString("127.0.0.1"),
+		Port:         section.Key("port").MustUint(8050),
+		PathPrefix:   strings.TrimSuffix(section.Key("path_prefix").MustString("/"), "/"),
+		StaticPrefix: strings.TrimSuffix(section.Key("static_prefix").MustString("/static"), "/"),
+		StaticDir:    section.Key("static_dir").MustString("static"),
+		TemplateDir:  section.Key("template_dir").MustString("templates"),
 	}
 
 	return nil

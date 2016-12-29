@@ -2,7 +2,7 @@ package main
 
 import (
 	"code.austinjadams.com/gong/config"
-	"code.austinjadams.com/gong/handlers"
+	"code.austinjadams.com/gong/routers"
 	"code.austinjadams.com/gong/templates"
 	"log"
 	"net/http"
@@ -26,20 +26,8 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	mux := http.NewServeMux()
-	// Ideally, the downstream server (nginx, Apache, etc.) would handle
-	// requests to /static/ instead, but this is useful for testing.
-	mux.Handle("/static/", http.StripPrefix("/static", http.FileServer(http.Dir("static"))))
-
-	reverser := &reverser{root: "/", static: "/static/"}
-
-	// Register repository paths
-	for _, repo := range cfg.Repos() {
-		repoHandler := handlers.NewRepo(reverser, repo, templates)
-		repoHandler.ConfigureMux(mux)
-	}
-
-	err = http.ListenAndServe(cfg.Global().BindInfo(), mux)
+	router := routers.NewMain(cfg, templates)
+	err = http.ListenAndServe(cfg.Global().BindInfo(), router)
 
 	if err != nil {
 		log.Fatalln(err)
