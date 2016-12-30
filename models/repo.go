@@ -40,13 +40,24 @@ func (r *Repo) ListFiles(entry *RepoTreeEntry) (result []RepoFile, err error) {
 }
 
 func (r *Repo) GetBlob(entry *RepoTreeEntry) (result string, err error) {
+	bytes, err := r.GetBlobBytes(entry)
+
+	if err != nil {
+		return
+	}
+
+	result = string(bytes)
+	return
+}
+
+func (r *Repo) GetBlobBytes(entry *RepoTreeEntry) (result []byte, err error) {
 	blob, err := entry.obj.AsBlob()
 
 	if err != nil {
 		return
 	}
 
-	result = string(blob.Contents())
+	result = blob.Contents()
 	return
 }
 
@@ -92,7 +103,7 @@ func (r *Repo) Find(branch, path string) (rte *RepoTreeEntry, err error) {
 
 		// Remove leading slash because git2go doesn't accept it, and possibly
 		// the trailing slash as described above
-		path = path[1:len(path)-rightOffset]
+		path = path[1 : len(path)-rightOffset]
 
 		var entry *git.TreeEntry
 		entry, err = tree.EntryByPath(path)
