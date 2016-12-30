@@ -87,6 +87,16 @@ div#container > ul {
     text-align: left;
 }
 
+#container pre {
+    background-color: #eee;
+    border-radius: 2px;
+    font-family: monospace;
+    font-size: 12px;
+    overflow-x: auto;
+    padding: 8px;
+    text-align: left;
+}
+
 ul#repolist li {
     margin-bottom: 8px;
 }

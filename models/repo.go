@@ -24,8 +24,8 @@ func NewRepo(name, description, path string) (*Repo, error) {
 	return &Repo{name, description, path, repo}, nil
 }
 
-func (r *Repo) ListFiles(branch, dir string) (result []RepoFile, err error) {
-	tree, err := r.tree(branch, dir)
+func (r *Repo) ListFiles(entry *RepoTreeEntry) (result []RepoFile, err error) {
+	tree, err := entry.obj.AsTree()
 
 	if err != nil {
 		return
@@ -39,51 +39,84 @@ func (r *Repo) ListFiles(branch, dir string) (result []RepoFile, err error) {
 	return
 }
 
-func (r *Repo) tree(branch, dir string) (tree *git.Tree, err error) {
+func (r *Repo) GetBlob(entry *RepoTreeEntry) (result string, err error) {
+	blob, err := entry.obj.AsBlob()
+
+	if err != nil {
+		return
+	}
+
+	result = string(blob.Contents())
+	return
+}
+
+func (r *Repo) Find(branch, path string) (rte *RepoTreeEntry, err error) {
 	ref, err := r.repo.LookupBranch(branch, git.BranchLocal)
 
 	if err != nil {
 		return
 	}
 
-	obj, err := ref.Peel(git.ObjectCommit)
+	commitObj, err := ref.Peel(git.ObjectCommit)
 
 	if err != nil {
 		return
 	}
 
-	commit, err := obj.AsCommit()
+	commit, err := commitObj.AsCommit()
 
 	if err != nil {
 		return
 	}
 
-	tree, err = commit.Tree()
+	tree, err := commit.Tree()
 
 	if err != nil {
 		return
 	}
+
+	var obj *git.Object
 
 	// If we want the tree at the root of the repository, return because
 	// we have it. Otherwise, search the root tree for the tree of the
 	// desired directory
-	if dir != "" && dir != "/" {
-		// Remove leading slash because git2go doesn't accept it
-		dir = dir[1:]
+	if path == "" || path == "/" {
+		obj = &tree.Object
+	} else {
+		// In case path points to a blob instead of a tree, choose to remove a
+		// trailing slash if present
+		rightOffset := 0
+		if path[len(path)-1] == '/' {
+			rightOffset = 1
+		}
+
+		// Remove leading slash because git2go doesn't accept it, and possibly
+		// the trailing slash as described above
+		path = path[1:len(path)-rightOffset]
 
 		var entry *git.TreeEntry
-		entry, err = tree.EntryByPath(dir)
+		entry, err = tree.EntryByPath(path)
 
 		if err != nil {
 			return
 		}
 
-		tree, err = r.repo.LookupTree(entry.Id)
+		obj, err = r.repo.Lookup(entry.Id)
 
 		if err != nil {
 			return
 		}
 	}
 
+	rte = &RepoTreeEntry{obj: obj}
+
 	return
+}
+
+type RepoTreeEntry struct {
+	obj *git.Object
+}
+
+func (rte *RepoTreeEntry) IsDir() bool {
+	return rte.obj.Type() == git.ObjectTree
 }

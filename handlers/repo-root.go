@@ -20,7 +20,15 @@ func NewRepoRoot(url url.Reverser, repo *models.Repo, templ *template.Template) 
 }
 
 func (rr *RepoRoot) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	files, err := rr.repo.ListFiles("master", "/")
+	entry, err := rr.repo.Find("master", "/")
+
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	files, err := rr.repo.ListFiles(entry)
 
 	if err != nil {
 		log.Println(err)

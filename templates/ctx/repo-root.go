@@ -14,7 +14,7 @@ type RepoRoot interface {
 
 func NewRepoRoot(url url.Reverser, repo *models.Repo, files []models.RepoFile,
 	readme template.HTML) RepoRoot {
-	return &repoRoot{NewRepoTree(url, repo, true, "/", files), readme}
+	return &repoRoot{NewRepoTree(url, repo, true, "/", true, files, ""), readme}
 }
 
 type repoRoot struct {
