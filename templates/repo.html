@@ -1,4 +1,4 @@
-{{ define "title" }}{{ .Repo.Name }}{{ end }}
+{{ define "title" }}{{ block "repo-title" . }}{{ end }} &laquo; {{ .Repo.Name }}{{ end }}
 {{ define "content" }}
   <header>
     <h1 id="title"><a href="{{ .URL.RepoRoot .Repo.Name }}">{{ .Repo.Name }}</a></h1>
