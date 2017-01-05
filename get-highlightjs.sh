@@ -5,6 +5,7 @@
 # this script on first run.
 
 set -e
+set -o pipefail
 
 url=https://highlightjs.org/download/
 tmpzip=highlightjs-TMP.zip
