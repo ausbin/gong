@@ -1,6 +1,7 @@
 package ctx
 
 import (
+	"code.austinjadams.com/gong/config"
 	"code.austinjadams.com/gong/models"
 	"code.austinjadams.com/gong/templates/url"
 )
@@ -15,8 +16,8 @@ type RepoTree interface {
 	Blob() string
 }
 
-func NewRepoTree(url url.Reverser, repo *models.Repo, isRoot bool, path string, isListing bool, files []models.RepoFile, blob string) RepoTree {
-	return &repoTree{NewRepoGlobal(url, repo), isRoot, path, isListing, files, blob}
+func NewRepoTree(cfg *config.Global, url url.Reverser, repo *models.Repo, isRoot bool, path string, isListing bool, files []models.RepoFile, blob string) RepoTree {
+	return &repoTree{NewRepoGlobal(cfg, url, repo), isRoot, path, isListing, files, blob}
 }
 
 type repoTree struct {

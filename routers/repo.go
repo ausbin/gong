@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"code.austinjadams.com/gong/config"
 	"code.austinjadams.com/gong/handlers"
 	"code.austinjadams.com/gong/models"
 	"code.austinjadams.com/gong/templates"
@@ -8,26 +9,27 @@ import (
 )
 
 type Repo struct {
+	cfg       *config.Global
 	url       url.Reverser
 	repo      *models.Repo
 	templates templates.Loader
 }
 
-func NewRepo(url url.Reverser, repo *models.Repo, templates templates.Loader) SubRouter {
-	return &Repo{url, repo, templates}
+func NewRepo(cfg *config.Global, url url.Reverser, repo *models.Repo, templates templates.Loader) SubRouter {
+	return &Repo{cfg, url, repo, templates}
 }
 
 func (r *Repo) ConfigureRouter(superRouter Router) {
 	superRouter.Handle(r.url.RepoRoot(r.repo.Name),
-		handlers.NewRepoRoot(r.url, r.repo, r.templates.Get("repo-root")))
+		handlers.NewRepoRoot(r.cfg, r.url, r.repo, r.templates.Get("repo-root")))
 	superRouter.Handle(r.url.RepoPlain(r.repo.Name, "/"),
 		handlers.NewRepoPlain(r.url, r.repo))
 	superRouter.Handle(r.url.RepoTree(r.repo.Name, "/", true),
-		handlers.NewRepoTree(r.url, r.repo, r.templates.Get("repo-tree")))
+		handlers.NewRepoTree(r.cfg, r.url, r.repo, r.templates.Get("repo-tree")))
 	superRouter.Handle(r.url.RepoLog(r.repo.Name),
-		handlers.NewRepoLog(r.url, r.repo, r.templates.Get("repo-log")))
+		handlers.NewRepoLog(r.cfg, r.url, r.repo, r.templates.Get("repo-log")))
 	superRouter.Handle(r.url.RepoRefs(r.repo.Name),
-		handlers.NewRepoRefs(r.url, r.repo, r.templates.Get("repo-refs")))
+		handlers.NewRepoRefs(r.cfg, r.url, r.repo, r.templates.Get("repo-refs")))
 }
 
 type repoReverser struct {

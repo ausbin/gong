@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"code.austinjadams.com/gong/config"
 	"code.austinjadams.com/gong/models"
 	"code.austinjadams.com/gong/templates/ctx"
 	"code.austinjadams.com/gong/templates/url"
@@ -10,13 +11,14 @@ import (
 )
 
 type RepoTree struct {
+	cfg   *config.Global
 	url   url.Reverser
 	repo  *models.Repo
 	templ *template.Template
 }
 
-func NewRepoTree(url url.Reverser, repo *models.Repo, templ *template.Template) *RepoTree {
-	return &RepoTree{url, repo, templ}
+func NewRepoTree(cfg *config.Global, url url.Reverser, repo *models.Repo, templ *template.Template) *RepoTree {
+	return &RepoTree{cfg, url, repo, templ}
 }
 
 func (rt *RepoTree) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -61,7 +63,7 @@ func (rt *RepoTree) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ctx := ctx.NewRepoTree(rt.url, rt.repo, path == "/", path, entry.IsDir(), files, blob)
+	ctx := ctx.NewRepoTree(rt.cfg, rt.url, rt.repo, path == "/", path, entry.IsDir(), files, blob)
 	err = rt.templ.Execute(w, ctx)
 	if err != nil {
 		log.Println(err)

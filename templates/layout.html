@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>{{ template "title" . }} &laquo; austin's code</title>
+    <title>{{ template "title" . }} &laquo; {{ .Title }}</title>
     <link rel="stylesheet" type="text/css" href="{{ .URL.Static "style.css" }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {{ block "styles" . }}{{ end }}

@@ -28,6 +28,8 @@ type Global struct {
 	Addr string
 	Port uint
 	// Server configuration
+	Title        string
+	Description  string
 	PathPrefix   string
 	StaticPrefix string
 	StaticDir    string
@@ -71,6 +73,8 @@ func (p *parser) parseGlobal() error {
 	p.global = &Global{
 		Addr:         section.Key("addr").MustString("127.0.0.1"),
 		Port:         section.Key("port").MustUint(8050),
+		Title:        section.Key("title").MustString("gong"),
+		Description:  section.Key("description").MustString("a gong instance"),
 		PathPrefix:   strings.TrimSuffix(section.Key("path_prefix").MustString("/"), "/"),
 		StaticPrefix: strings.TrimSuffix(section.Key("static_prefix").MustString("/static"), "/"),
 		StaticDir:    section.Key("static_dir").MustString("static"),

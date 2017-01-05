@@ -1,6 +1,7 @@
 package ctx
 
 import (
+	"code.austinjadams.com/gong/config"
 	"code.austinjadams.com/gong/models"
 	"code.austinjadams.com/gong/templates/url"
 )
@@ -13,8 +14,8 @@ type RepoGlobal interface {
 	Repo() *models.Repo
 }
 
-func NewRepoGlobal(url url.Reverser, repo *models.Repo) RepoGlobal {
-	return &repoGlobal{NewGlobal(url), repo}
+func NewRepoGlobal(cfg *config.Global, url url.Reverser, repo *models.Repo) RepoGlobal {
+	return &repoGlobal{NewGlobal(cfg, url), repo}
 }
 
 type repoGlobal struct {

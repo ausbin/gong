@@ -27,7 +27,7 @@ func NewMain(cfg config.Parser, templates templates.Loader) Router {
 
 	// Register repository paths
 	for _, repo := range cfg.Repos() {
-		NewRepo(reverser, repo, templates).ConfigureRouter(m)
+		NewRepo(cfg.Global(), reverser, repo, templates).ConfigureRouter(m)
 	}
 
 	return m
