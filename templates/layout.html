@@ -5,11 +5,13 @@
     <title>{{ template "title" . }} &laquo; austin's code</title>
     <link rel="stylesheet" type="text/css" href="{{ .URL.Static "style.css" }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{ block "styles" . }}{{ end }}
   </head>
   <body>
     <div id="container">
     {{ template "content" . }}
     </div>
+    {{ block "scripts" . }}{{ end }}
   </body>
 </html>
 {{ end }}

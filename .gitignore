@@ -3,5 +3,5 @@
 # custom configuration files
 /*.ini
 !/config.example.ini
-# bower packages
+# static files
 /static/highlightjs

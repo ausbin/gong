@@ -15,3 +15,12 @@
     <pre><code>{{ .Blob }}</code></pre>
   {{ end }}
 {{ end }}
+
+{{/* highlight.js */}}
+{{ define "styles" }}
+  <link rel="stylesheet" href="{{ .URL.Static "highlightjs/styles/mono-blue.css" }}">
+{{ end }}
+{{ define "scripts" }}
+  <script src="{{ .URL.Static "highlightjs/highlight.pack.js" }}"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+{{ end }}
