@@ -42,7 +42,7 @@ while read -r lang; do
     data="$data&$lang.js=on"
 done <"$languages"
 
-curl "$url" -o "$tmpzip" -H 'Referer: https://highlightjs.org/download/' -H "Cookie: csrftoken=$csrftoken" --data "$data"
+curl "$url" -o "$tmpzip" -H "Referer: $url" -H "Cookie: csrftoken=$csrftoken" --data "$data"
 
 mkdir -p "$outdir"
 unzip -o "$tmpzip" highlight.pack.js -d "$outdir"
