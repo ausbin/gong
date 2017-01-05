@@ -3,5 +3,7 @@
 # custom configuration files
 /*.ini
 !/config.example.ini
+# languages file added by get-highlightjs.sh
+/languages
 # static files
 /static/highlightjs
