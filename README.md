@@ -1,10 +1,36 @@
-**Warning: there's nothing here yet. I'm brainstorming here**
+gong
+====
+
+gong is a web git repository viewer written in Go intended to replace [cgit][3]
+for my personal use case. I've licensed it under the [AGPLv3][4].
+
+Building
+--------
+
+This is a little messy at the moment. Dependencies are currently
+[highlight.js][5], [go-ini][6], and [git2go][7] ([libgit2][8] bindings
+for Go).
+
+For go-ini, you can simply `go get github.com/go-ini/ini`, but for
+git2go, you'll need to `go get github.com/libgit2/git2go` _and then_
+checkout the branch corresponding to your system's libgit2 version in
+the cloned repository. For example, since I have libgit2 version 0.24
+installed, I checked out `$GOPATH/src/github.com/libgit2/git2go` to the
+`v24` branch.
+
+Once you have the Go dependencies installed, run `go build` in the
+`gong` directory (aka the package for the binary).
+
+To download highlight.js, run the `get-highlightjs.sh` shell script. If
+you need to add more languages (the default list is short for
+performance reasons), you can modify the `languages` file the script
+generates and run the script again.
+
 
 The gong Manifesto
-==================
+------------------
 
-Gripes with Other Tools
------------------------
+### Gripes with Other Tools
 
 Many tools for self-hosting git repositories on the web exist, but none
 of them perfectly fit my use case.
@@ -55,8 +81,7 @@ of them perfectly fit my use case.
     - It's a webapp written in C. Again, it's well-written and I respect
       the developers, but this disturbs me.
 
-Goals
------
+### Goals
 
 In essence, provide a minimal, modern Go reboot of cgit for my git
 repositories.
@@ -81,3 +106,9 @@ repositories.
 
 [1]: https://en.wikipedia.org/wiki/GitHub
 [2]: https://gitlab.com/gitlab-org/gitlab-ce/blob/master/README.md
+[3]: https://git.zx2c4.com/cgit/about/
+[4]: https://www.gnu.org/licenses/agpl-3.0.en.html
+[5]: https://highlightjs.org/
+[6]: https://github.com/go-ini/ini
+[7]: https://github.com/libgit2/git2go
+[8]: https://libgit2.github.com/
