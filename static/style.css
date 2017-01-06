@@ -182,6 +182,19 @@ div#readme {
     text-align: left;
 }
 
+#breadcrumbs {
+    display: block;
+    font-family: monospace;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+}
+
+#breadcrumbs a {
+    color: #333;
+}
+
 @media (max-width: 500px) {
     #files td.filename {
         padding: 2px 0;

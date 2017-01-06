@@ -63,7 +63,7 @@ func (rt *RepoTree) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ctx := ctx.NewRepoTree(rt.cfg, rt.url, rt.repo, path == "/", path, entry.IsDir(), files, blob)
+	ctx := ctx.NewRepoTree(rt.cfg, rt.url, rt.repo, path, entry.IsDir(), files, blob)
 	err = rt.templ.Execute(w, ctx)
 	if err != nil {
 		log.Println(err)
