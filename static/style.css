@@ -47,23 +47,23 @@ header nav a:hover {
     color: #fff;
 }
 
-h1#title {
+#title {
     font-size: 30px;
     font-weight: normal;
     margin: 0;
     padding: 0;
 }
 
-h1#title a {
+#title a {
     color: #333;
     text-decoration: none;
 }
 
-h1#title a:hover {
+#title a:hover {
     text-decoration: underline;
 }
 
-p#subtitle {
+#subtitle {
     color: #555;
     font-size: 12px;
     margin: 0;
@@ -76,11 +76,11 @@ p#subtitle {
     padding: 16px;
 }
 
-header, div#container > ul {
+header, #container > ul {
     max-width: 384px;
 }
 
-div#container > ul {
+#container > ul {
     list-style-type: none;
     margin: 0 auto;
     padding: 0;
@@ -97,15 +97,15 @@ div#container > ul {
     text-align: left;
 }
 
-ul#repolist li {
+#repolist li {
     margin-bottom: 8px;
 }
 
-ul#repolist div.reponame {
+#repolist .reponame {
     display: block;
 }
 
-ul#repolist p {
+#repolist p {
     color: #222;
     display: block;
     font-size: 12px;
@@ -113,26 +113,26 @@ ul#repolist p {
     padding: 0;
 }
 
-ul#repolist a:link, ul#repolist a:hover, ul#repolist a:visited, ul#repolist a:active {
+#repolist a:link, #repolist a:hover, #repolist a:visited, #repolist a:active {
     color: #333;
     display: inline-block;
     font-size: 18px;
 }
 
-div.repoage {
+.repoage {
     float: right;
     font-size: 12px;
 }
 
-div.reponew {
+.reponew {
     color: #080;
 }
 
-div.repomid {
+.repomid {
     color: #333;
 }
 
-div.repoold {
+.repoold {
     color: #777;
 }
 
@@ -176,7 +176,7 @@ div.repoold {
     text-align: right;
 }
 
-div#readme {
+#readme {
     font-size: 14px;
     overflow-x: auto;
     text-align: left;
