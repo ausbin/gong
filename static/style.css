@@ -76,17 +76,11 @@ header nav a:hover {
     padding: 16px;
 }
 
-header, #container > ul {
+header {
     max-width: 384px;
 }
 
-#container > ul {
-    list-style-type: none;
-    margin: 0 auto;
-    padding: 0;
-    text-align: left;
-}
-
+/* Code blocks */
 #container pre {
     background-color: #eee;
     border-radius: 2px;
@@ -95,45 +89,6 @@ header, #container > ul {
     overflow-x: auto;
     padding: 8px;
     text-align: left;
-}
-
-#repolist li {
-    margin-bottom: 8px;
-}
-
-#repolist .reponame {
-    display: block;
-}
-
-#repolist p {
-    color: #222;
-    display: block;
-    font-size: 12px;
-    margin: 0;
-    padding: 0;
-}
-
-#repolist a:link, #repolist a:hover, #repolist a:visited, #repolist a:active {
-    color: #333;
-    display: inline-block;
-    font-size: 18px;
-}
-
-.repoage {
-    float: right;
-    font-size: 12px;
-}
-
-.reponew {
-    color: #080;
-}
-
-.repomid {
-    color: #333;
-}
-
-.repoold {
-    color: #777;
 }
 
 #files {
