@@ -8,15 +8,16 @@ Building
 --------
 
 This is a little messy at the moment. Dependencies are currently
-[highlight.js][5], [go-ini][6], and [git2go][7] ([libgit2][8] bindings
-for Go).
+[highlight.js][5], [go-ini][6], [blackfriday][9], and [git2go][7]
+([libgit2][8] bindings for Go).
 
-For go-ini, you can simply `go get github.com/go-ini/ini`, but for
-git2go, you'll need to `go get github.com/libgit2/git2go` _and then_
-checkout the branch corresponding to your system's libgit2 version in
-the cloned repository. For example, since I have libgit2 version 0.24
-installed, I checked out `$GOPATH/src/github.com/libgit2/git2go` to the
-`v24` branch.
+For go-ini and blackfriday, you can simply `go get
+github.com/go-ini/ini` and `github.com/russross/blackfriday`
+respectively, but for git2go, you'll need to `go get
+github.com/libgit2/git2go` _and then_ checkout the branch corresponding
+to your system's libgit2 version in the cloned repository. For example,
+since I have libgit2 version 0.24 installed, I checked out
+`$GOPATH/src/github.com/libgit2/git2go` to the `v24` branch.
 
 Once you have the Go dependencies installed, run `go build` in the
 `gong` directory (aka the package for the binary).
@@ -112,3 +113,4 @@ repositories.
 [6]: https://github.com/go-ini/ini
 [7]: https://github.com/libgit2/git2go
 [8]: https://libgit2.github.com/
+[9]: https://github.com/russross/blackfriday
