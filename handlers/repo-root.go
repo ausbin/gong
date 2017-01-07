@@ -23,7 +23,7 @@ func NewRepoRoot(cfg *config.Global, url url.Reverser, repo *models.Repo, templ 
 }
 
 func (rr *RepoRoot) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	entry, err := rr.repo.Find("master", "/")
+	entry, err := rr.repo.Find(rr.repo.DefaultBranch, "/")
 
 	if err != nil {
 		log.Println(err)
@@ -49,7 +49,7 @@ func (rr *RepoRoot) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rr *RepoRoot) Readme() (content string, isReadmeHTML bool) {
-	readme := rr.repo.Readme("master")
+	readme := rr.repo.Readme(rr.repo.DefaultBranch)
 
 	if readme != nil {
 		if readme.Type == models.RepoReadmeTypeMarkdown {

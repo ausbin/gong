@@ -97,6 +97,7 @@ func (p *parser) parseRepos() error {
 			section.Name(),
 			section.Key("description").MustString(""),
 			section.Key("path").String(),
+			section.Key("defbranch").MustString("master"),
 		)
 
 		if err != nil {

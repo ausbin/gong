@@ -26,7 +26,7 @@ func (rt *RepoTree) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// absolute path
 	path := r.URL.Path[len(rt.url.RepoTree(rt.repo.Name, "/", true))-1:]
 
-	entry, err := rt.repo.Find("master", path)
+	entry, err := rt.repo.Find(rt.repo.DefaultBranch, path)
 
 	if err != nil {
 		log.Println(err)

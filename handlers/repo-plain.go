@@ -26,7 +26,7 @@ func (rp *RepoPlain) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// absolute path
 	path := r.URL.Path[len(rp.url.RepoPlain(rp.repo.Name, "/"))-1:]
 
-	entry, err := rp.repo.Find("master", path)
+	entry, err := rp.repo.Find(rp.repo.DefaultBranch, path)
 
 	var blob []byte
 	if err == nil {
