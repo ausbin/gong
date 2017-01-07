@@ -131,3 +131,44 @@ type RepoTreeEntry struct {
 func (rte *RepoTreeEntry) IsDir() bool {
 	return rte.obj.Type() == git.ObjectTree
 }
+
+const (
+	RepoReadmeTypePlain RepoReadmeType = iota
+	RepoReadmeTypeMarkdown
+)
+
+type RepoReadmeType int
+type RepoReadme struct {
+	Content []byte
+	Type    RepoReadmeType
+}
+
+func NewRepoReadme(blob []byte, type_ RepoReadmeType) *RepoReadme {
+	return &RepoReadme{blob, type_}
+}
+
+func (r *Repo) Readme(branch string) *RepoReadme {
+	readmeNames := []struct {
+		name  string
+		type_ RepoReadmeType
+	}{
+		{"/README.md", RepoReadmeTypeMarkdown},
+		{"/README", RepoReadmeTypePlain},
+	}
+
+	for _, name := range readmeNames {
+		entry, err := r.Find(branch, name.name)
+
+		// XXX Handle errors more carefully. err != nil does not
+		//     necessarily mean the file doesn't exist in the tree
+		if err == nil {
+			blob, err := r.GetBlobBytes(entry)
+
+			if err == nil {
+				return NewRepoReadme(blob, name.type_)
+			}
+		}
+	}
+
+	return nil
+}

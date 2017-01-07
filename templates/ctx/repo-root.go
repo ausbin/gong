@@ -10,17 +10,33 @@ import (
 type RepoRoot interface {
 	RepoTree
 
-	Readme() template.HTML
+	ReadmePlain() string
+	ReadmeHTML() template.HTML
 }
 
-func NewRepoRoot(cfg *config.Global, url url.Reverser, repo *models.Repo, files []models.RepoFile, readme template.HTML) RepoRoot {
-	return &repoRoot{NewRepoTree(cfg, url, repo, "/", true, files, ""), readme}
+func NewRepoRoot(cfg *config.Global, url url.Reverser, repo *models.Repo, files []models.RepoFile, readme string, isReadmeHTML bool) RepoRoot {
+	return &repoRoot{NewRepoTree(cfg, url, repo, "/", true, files, ""), readme, isReadmeHTML}
 }
 
 type repoRoot struct {
 	RepoTree
 
-	readme template.HTML
+	readme       string
+	isReadmeHTML bool
 }
 
-func (r *repoRoot) Readme() template.HTML { return r.readme }
+func (r *repoRoot) ReadmePlain() string {
+	if r.isReadmeHTML {
+		return ""
+	} else {
+		return r.readme
+	}
+}
+
+func (r *repoRoot) ReadmeHTML() template.HTML {
+	if r.isReadmeHTML {
+		return template.HTML(r.readme)
+	} else {
+		return template.HTML("")
+	}
+}

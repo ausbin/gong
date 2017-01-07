@@ -5,6 +5,7 @@ import (
 	"code.austinjadams.com/gong/models"
 	"code.austinjadams.com/gong/templates/ctx"
 	"code.austinjadams.com/gong/templates/url"
+	"github.com/russross/blackfriday"
 	"html/template"
 	"log"
 	"net/http"
@@ -38,10 +39,27 @@ func (rr *RepoRoot) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ctx := ctx.NewRepoRoot(rr.cfg, rr.url, rr.repo, files,
-		template.HTML("this is the <em>readme</em>"))
+	readme, isReadmeHTML := rr.Readme()
+
+	ctx := ctx.NewRepoRoot(rr.cfg, rr.url, rr.repo, files, readme, isReadmeHTML)
 	err = rr.templ.Execute(w, ctx)
 	if err != nil {
 		log.Println(err)
 	}
+}
+
+func (rr *RepoRoot) Readme() (content string, isReadmeHTML bool) {
+	readme := rr.repo.Readme("master")
+
+	if readme != nil {
+		if readme.Type == models.RepoReadmeTypeMarkdown {
+			return string(blackfriday.MarkdownBasic(readme.Content)), true
+		} else {
+			// RepoReadmeTypePlain
+			return string(readme.Content), false
+		}
+	}
+
+	// No readme was found
+	return "", false
 }

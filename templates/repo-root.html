@@ -1,4 +1,11 @@
 {{ define "repo-title" }}summary{{ end }}
 {{ define "repo-body" }}
-    {{ .Readme }}
+    <div id="readme">
+        {{ with .ReadmeHTML }}
+            {{ . }}
+        {{ end }}
+        {{ with .ReadmePlain }}
+            <pre>{{ . }}</pre>
+        {{ end }}
+    </div>
 {{ end }}
