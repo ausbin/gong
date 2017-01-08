@@ -4,6 +4,7 @@ package templates
 // Order: name, parent name
 var templatesToLoad = []loaderTempl{
 	{"layout", ""},
+	{"list", "layout"},
 	{"repo", "layout"},
 	{"repo-tree", "repo"},
 	{"repo-root", "repo-tree"},

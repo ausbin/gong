@@ -2,6 +2,7 @@ package routers
 
 import (
 	"code.austinjadams.com/gong/config"
+	"code.austinjadams.com/gong/handlers"
 	"code.austinjadams.com/gong/templates"
 	"code.austinjadams.com/gong/templates/url"
 	"net/http"
@@ -30,6 +31,10 @@ func NewMain(cfg config.Parser, templates templates.Loader) Router {
 		NewRepo(cfg.Global(), reverser, repo, templates).ConfigureRouter(m)
 	}
 
+	// Show a repository listing at /
+	m.Handle(reverser.Root(),
+		handlers.NewList(cfg.Global(), reverser, cfg.Repos(), templates.Get("list")))
+
 	return m
 }
 
@@ -40,7 +45,7 @@ type reverser struct {
 }
 
 func (r *reverser) Root() string {
-	return r.root
+	return r.root + "/"
 }
 
 func (r *reverser) Static(path string) string {

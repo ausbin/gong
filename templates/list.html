@@ -1,0 +1,12 @@
+{{ define "title" }}repository list{{ end }}
+{{ define "content" }}
+  <header>
+    <h1 id="title">{{ .Title }}</a></h1>
+    <p id="subtitle">{{ .Description }}</p>
+  </header>
+  <ul id="list">
+    {{ range .Repos }}
+      <li><a href="{{ $.URL.RepoRoot .Name }}">{{ .Name }}</a></li>
+    {{ end }}
+  </ul>
+{{ end }}
