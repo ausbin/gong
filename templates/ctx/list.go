@@ -1,8 +1,8 @@
 package ctx
 
 import (
-	"code.austinjadams.com/gong/models"
 	"code.austinjadams.com/gong/config"
+	"code.austinjadams.com/gong/models"
 	"code.austinjadams.com/gong/templates/url"
 )
 
