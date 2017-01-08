@@ -16,16 +16,13 @@ func NewRepoPlain(url url.Reverser, repo *models.Repo) *RepoPlain {
 	return &RepoPlain{url, repo}
 }
 
-func (rp *RepoPlain) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (rp *RepoPlain) Serve(w http.ResponseWriter, r *http.Request, info Info) {
 	if r.URL.Path[len(r.URL.Path)-1] == '/' {
 		http.Redirect(w, r, r.URL.Path[:len(r.URL.Path)-1], http.StatusMovedPermanently)
 		return
 	}
 
-	// The -1 leaves us with a leading slash in the resulting path — so an
-	// absolute path
-	path := r.URL.Path[len(rp.url.RepoPlain(rp.repo, "/"))-1:]
-
+	path := info.Subtree()
 	entry, err := rp.repo.Find(rp.repo.DefaultBranch, path)
 
 	var blob []byte

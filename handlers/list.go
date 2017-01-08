@@ -21,7 +21,7 @@ func NewList(cfg *config.Global, url url.Reverser, repos []*models.Repo, templ *
 	return &List{cfg, url, repos, templ}
 }
 
-func (l *List) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (l *List) Serve(w http.ResponseWriter, r *http.Request, info Info) {
 	ctx := ctx.NewList(l.cfg, l.url, l.repos)
 
 	err := l.templ.Execute(w, ctx)

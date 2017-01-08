@@ -18,7 +18,7 @@ func NewMain(cfg config.Parser, templates templates.Loader) Router {
 	// Ideally, the downstream server (nginx, Apache, etc.) would handle
 	// requests to /static/ instead, but this is useful for testing.
 	m.Handle(cfg.Global().StaticPrefix+"/", true,
-		http.StripPrefix(cfg.Global().StaticPrefix, http.FileServer(http.Dir(cfg.Global().StaticDir))))
+		handlers.Adapter(http.StripPrefix(cfg.Global().StaticPrefix, http.FileServer(http.Dir(cfg.Global().StaticDir)))))
 
 	reverser := &reverser{
 		RepoReverser: NewRepoReverser(cfg.Global().PathPrefix),
@@ -38,7 +38,7 @@ func NewMain(cfg config.Parser, templates templates.Loader) Router {
 	return m
 }
 
-func (m *main) Handle(path string, isSubtree bool, handler http.Handler) {
+func (m *main) Handle(path string, isSubtree bool, handler handlers.Handler) {
 	m.mux.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
 		// If this route is not a subtree (i.e., if it should not accept
 		// sub-paths, like /X/Y/Z for a route /X/) and this request includes a
@@ -46,7 +46,8 @@ func (m *main) Handle(path string, isSubtree bool, handler http.Handler) {
 		if !isSubtree && len(r.URL.Path) > len(path) {
 			http.NotFound(w, r)
 		} else {
-			handler.ServeHTTP(w, r)
+			subtree := r.URL.Path[len(path)-1:]
+			handler.Serve(w, r, &handlerInfo{subtree})
 		}
 	})
 }
@@ -54,6 +55,12 @@ func (m *main) Handle(path string, isSubtree bool, handler http.Handler) {
 func (m *main) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	m.mux.ServeHTTP(w, r)
 }
+
+type handlerInfo struct {
+	subtree string
+}
+
+func (hi *handlerInfo) Subtree() string { return hi.subtree }
 
 type reverser struct {
 	url.RepoReverser

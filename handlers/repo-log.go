@@ -21,7 +21,7 @@ func NewRepoLog(cfg *config.Global, url url.Reverser, repo *models.Repo, templ *
 	return &RepoLog{cfg, url, repo, templ}
 }
 
-func (rl *RepoLog) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (rl *RepoLog) Serve(w http.ResponseWriter, r *http.Request, info Info) {
 	err := rl.templ.Execute(w, ctx.NewRepoLog(rl.cfg, rl.url, rl.repo))
 
 	if err != nil {

@@ -21,7 +21,7 @@ func NewRepoRefs(cfg *config.Global, url url.Reverser, repo *models.Repo, templ 
 	return &RepoRefs{cfg, url, repo, templ}
 }
 
-func (rr *RepoRefs) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (rr *RepoRefs) Serve(w http.ResponseWriter, r *http.Request, info Info) {
 	err := rr.templ.Execute(w, ctx.NewRepoRefs(rr.cfg, rr.url, rr.repo))
 
 	if err != nil {

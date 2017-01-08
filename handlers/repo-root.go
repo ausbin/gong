@@ -22,7 +22,7 @@ func NewRepoRoot(cfg *config.Global, url url.Reverser, repo *models.Repo, templ 
 	return &RepoRoot{cfg, url, repo, templ}
 }
 
-func (rr *RepoRoot) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (rr *RepoRoot) Serve(w http.ResponseWriter, r *http.Request, info Info) {
 	entry, err := rr.repo.Find(rr.repo.DefaultBranch, "/")
 
 	if err != nil {
