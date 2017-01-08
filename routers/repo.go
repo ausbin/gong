@@ -45,7 +45,7 @@ func (r *repoReverser) RepoRoot(repo *models.Repo) string {
 }
 
 func (r *repoReverser) RepoPlain(repo *models.Repo, path string) string {
-	return r.repoPrefix + "/" + repo.Name + "/plain" + path
+	return r.repoPrefix + r.RepoRoot(repo) + "plain" + path
 }
 
 func (r *repoReverser) RepoTree(repo *models.Repo, path string, isDir bool) string {
