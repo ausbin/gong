@@ -1,10 +1,10 @@
 {{ define "title" }}{{ block "repo-title" . }}{{ end }} &laquo; {{ .Repo.Name }}{{ end }}
 {{ define "content" }}
   <header>
-    <h1 id="title"><a href="{{ .URL.RepoRoot .Repo.Name }}">{{ .Repo.Name }}</a></h1>
+    <h1 id="title"><a href="{{ .URL.RepoRoot .Repo }}">{{ .Repo.Name }}</a></h1>
     <p id="subtitle">{{ .Repo.Description }}</p>
     <nav>
-        <ul><li><a href="{{ .URL.RepoTree .Repo.Name "/" true }}">browse</a></li><li><a href="{{ .URL.RepoLog .Repo.Name }}">log</a></li><li><a href="{{ .URL.RepoRefs .Repo.Name }}">releases</a></li></ul>
+        <ul><li><a href="{{ .URL.RepoTree .Repo "/" true }}">browse</a></li><li><a href="{{ .URL.RepoLog .Repo }}">log</a></li><li><a href="{{ .URL.RepoRefs .Repo }}">releases</a></li></ul>
     </nav>
     {{ block "repo-header" . }}{{ end }}
   </header>

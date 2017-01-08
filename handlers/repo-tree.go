@@ -24,7 +24,7 @@ func NewRepoTree(cfg *config.Global, url url.Reverser, repo *models.Repo, templ 
 func (rt *RepoTree) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// The -1 leaves us with a leading slash in the resulting path — so an
 	// absolute path
-	path := r.URL.Path[len(rt.url.RepoTree(rt.repo.Name, "/", true))-1:]
+	path := r.URL.Path[len(rt.url.RepoTree(rt.repo, "/", true))-1:]
 
 	entry, err := rt.repo.Find(rt.repo.DefaultBranch, path)
 

@@ -24,7 +24,7 @@ func (rp *RepoPlain) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// The -1 leaves us with a leading slash in the resulting path — so an
 	// absolute path
-	path := r.URL.Path[len(rp.url.RepoPlain(rp.repo.Name, "/"))-1:]
+	path := r.URL.Path[len(rp.url.RepoPlain(rp.repo, "/"))-1:]
 
 	entry, err := rp.repo.Find(rp.repo.DefaultBranch, path)
 

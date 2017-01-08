@@ -20,15 +20,15 @@ func NewRepo(cfg *config.Global, url url.Reverser, repo *models.Repo, templates 
 }
 
 func (r *Repo) ConfigureRouter(superRouter Router) {
-	superRouter.Handle(r.url.RepoRoot(r.repo.Name),
+	superRouter.Handle(r.url.RepoRoot(r.repo),
 		handlers.NewRepoRoot(r.cfg, r.url, r.repo, r.templates.Get("repo-root")))
-	superRouter.Handle(r.url.RepoPlain(r.repo.Name, "/"),
+	superRouter.Handle(r.url.RepoPlain(r.repo, "/"),
 		handlers.NewRepoPlain(r.url, r.repo))
-	superRouter.Handle(r.url.RepoTree(r.repo.Name, "/", true),
+	superRouter.Handle(r.url.RepoTree(r.repo, "/", true),
 		handlers.NewRepoTree(r.cfg, r.url, r.repo, r.templates.Get("repo-tree")))
-	superRouter.Handle(r.url.RepoLog(r.repo.Name),
+	superRouter.Handle(r.url.RepoLog(r.repo),
 		handlers.NewRepoLog(r.cfg, r.url, r.repo, r.templates.Get("repo-log")))
-	superRouter.Handle(r.url.RepoRefs(r.repo.Name),
+	superRouter.Handle(r.url.RepoRefs(r.repo),
 		handlers.NewRepoRefs(r.cfg, r.url, r.repo, r.templates.Get("repo-refs")))
 }
 
@@ -40,15 +40,15 @@ func NewRepoReverser(repoPrefix string) url.RepoReverser {
 	return &repoReverser{repoPrefix}
 }
 
-func (r *repoReverser) RepoRoot(repo string) string {
-	return r.repoPrefix + "/" + repo + "/"
+func (r *repoReverser) RepoRoot(repo *models.Repo) string {
+	return r.repoPrefix + "/" + repo.Name + "/"
 }
 
-func (r *repoReverser) RepoPlain(repo string, path string) string {
-	return r.repoPrefix + "/" + repo + "/plain" + path
+func (r *repoReverser) RepoPlain(repo *models.Repo, path string) string {
+	return r.repoPrefix + "/" + repo.Name + "/plain" + path
 }
 
-func (r *repoReverser) RepoTree(repo string, path string, isDir bool) string {
+func (r *repoReverser) RepoTree(repo *models.Repo, path string, isDir bool) string {
 	result := r.RepoRoot(repo) + "tree" + path
 	hasSlash := result[len(result)-1] == '/'
 
@@ -62,10 +62,10 @@ func (r *repoReverser) RepoTree(repo string, path string, isDir bool) string {
 	return result
 }
 
-func (r *repoReverser) RepoLog(repo string) string {
+func (r *repoReverser) RepoLog(repo *models.Repo) string {
 	return r.repoPrefix + r.RepoRoot(repo) + "log/"
 }
 
-func (r *repoReverser) RepoRefs(repo string) string {
+func (r *repoReverser) RepoRefs(repo *models.Repo) string {
 	return r.repoPrefix + r.RepoRoot(repo) + "refs/"
 }

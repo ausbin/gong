@@ -1,5 +1,9 @@
 package url
 
+import (
+	"code.austinjadams.com/gong/models"
+)
+
 type Reverser interface {
 	RepoReverser
 
@@ -8,9 +12,9 @@ type Reverser interface {
 }
 
 type RepoReverser interface {
-	RepoRoot(repo string) string
-	RepoPlain(repo string, path string) string
-	RepoTree(repo string, path string, isDir bool) string
-	RepoLog(repo string) string
-	RepoRefs(repo string) string
+	RepoRoot(repo *models.Repo) string
+	RepoPlain(repo *models.Repo, path string) string
+	RepoTree(repo *models.Repo, path string, isDir bool) string
+	RepoLog(repo *models.Repo) string
+	RepoRefs(repo *models.Repo) string
 }
