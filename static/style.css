@@ -91,6 +91,45 @@ header {
     text-align: left;
 }
 
+#list {
+    list-style-type: none;
+    margin: 16px 0 0 0;
+    padding: 0;
+}
+
+#list li {
+    margin: 0;
+    padding: 0;
+}
+
+#list a {
+    border-left: 1px solid #bbb;
+    border-radius: 4px 4px 0 0;
+    border-right: 1px solid #bbb;
+    border-top: 1px solid #bbb;
+    color: #333;
+    display: block;
+    font-weight: normal;
+    margin: 0 auto;
+    max-width: 256px;
+    min-height: 32px;
+    padding: 4px 0;
+    text-decoration: none;
+}
+
+#list a:hover {
+    background-color: #bbb;
+    color: white;
+}
+
+.list-name {
+    font-weight: bold;
+}
+
+.list-description {
+    padding: 0 2px;
+}
+
 #files {
     border-collapse: collapse;
     font-family: monospace;
