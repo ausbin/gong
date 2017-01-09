@@ -60,9 +60,9 @@ func TestRepoReverserPlain(t *testing.T) {
 	repo2 := makeRepo2()
 
 	tests := []struct {
-		rev url.RepoReverser
-		repo *models.Repo
-		path string
+		rev      url.RepoReverser
+		repo     *models.Repo
+		path     string
 		expected string
 	}{
 		{rev1, repo1, "/x", "/foo/bar/baz/linux/plain/x"},
@@ -78,7 +78,7 @@ func TestRepoReverserPlain(t *testing.T) {
 	for _, test := range tests {
 		if got := test.rev.RepoPlain(test.repo, test.path); got != test.expected {
 			t.Error("RepoPlain() returned wrong value",
-			        "RepoPlain(", test.repo, test.path, ") →", got, "!=", test.expected)
+				"RepoPlain(", test.repo, test.path, ") →", got, "!=", test.expected)
 		}
 	}
 }
@@ -90,10 +90,10 @@ func TestRepoReverserTree(t *testing.T) {
 	repo2 := makeRepo2()
 
 	tests := []struct {
-		rev url.RepoReverser
-		repo *models.Repo
-		isDir bool
-		path string
+		rev      url.RepoReverser
+		repo     *models.Repo
+		isDir    bool
+		path     string
 		expected string
 	}{
 		// Nonempty prefix
@@ -143,7 +143,7 @@ func TestRepoReverserTree(t *testing.T) {
 	for _, test := range tests {
 		if got := test.rev.RepoTree(test.repo, test.path, test.isDir); got != test.expected {
 			t.Error("RepoTree() returned wrong value.",
-			        "RepoTree(", test.repo, test.path, test.isDir, ") →", got, "!=", test.expected)
+				"RepoTree(", test.repo, test.path, test.isDir, ") →", got, "!=", test.expected)
 		}
 	}
 }
