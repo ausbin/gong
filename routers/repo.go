@@ -45,7 +45,7 @@ func (r *repoReverser) RepoRoot(repo *models.Repo) string {
 }
 
 func (r *repoReverser) RepoPlain(repo *models.Repo, path string) string {
-	return r.repoPrefix + r.RepoRoot(repo) + "plain" + path
+	return r.RepoRoot(repo) + "plain" + path
 }
 
 func (r *repoReverser) RepoTree(repo *models.Repo, path string, isDir bool) string {
@@ -54,7 +54,7 @@ func (r *repoReverser) RepoTree(repo *models.Repo, path string, isDir bool) stri
 
 	// Remove/add slash as needed
 	if hasSlash && !isDir {
-		result = result[:len(path)-1]
+		result = result[:len(result)-1]
 	} else if !hasSlash && isDir {
 		result += "/"
 	}
@@ -63,9 +63,9 @@ func (r *repoReverser) RepoTree(repo *models.Repo, path string, isDir bool) stri
 }
 
 func (r *repoReverser) RepoLog(repo *models.Repo) string {
-	return r.repoPrefix + r.RepoRoot(repo) + "log/"
+	return r.RepoRoot(repo) + "log/"
 }
 
 func (r *repoReverser) RepoRefs(repo *models.Repo) string {
-	return r.repoPrefix + r.RepoRoot(repo) + "refs/"
+	return r.RepoRoot(repo) + "refs/"
 }
