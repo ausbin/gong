@@ -14,7 +14,18 @@ type Parser interface {
 
 func NewParser(path string) (Parser, error) {
 	p := &parser{}
-	err := p.parse(path)
+	err := p.readFile(path)
+
+	if err != nil {
+		return nil, err
+	} else {
+		return p, nil
+	}
+}
+
+func NewParserBytes(data []byte) (Parser, error) {
+	p := &parser{}
+	err := p.readBytes(data)
 
 	if err != nil {
 		return nil, err
@@ -47,7 +58,20 @@ type parser struct {
 	repos  []*models.Repo
 }
 
-func (p *parser) parse(path string) error {
+func (p *parser) readBytes(data []byte) error {
+	var err error
+	p.cfg, err = ini.Load(data)
+
+	if err != nil {
+		return err
+	}
+
+	err = p.parse()
+
+	return err
+}
+
+func (p *parser) readFile(path string) error {
 	var err error
 	p.cfg, err = ini.Load(path)
 
@@ -55,11 +79,21 @@ func (p *parser) parse(path string) error {
 		return err
 	}
 
-	if err = p.parseGlobal(); err != nil {
+	err = p.parse()
+
+	return err
+}
+
+func (p *parser) parse() error {
+	err := p.parseGlobal()
+
+	if err != nil {
 		return err
 	}
 
-	if err = p.parseRepos(); err != nil {
+	err = p.parseRepos()
+
+	if err != nil {
 		return err
 	}
 
