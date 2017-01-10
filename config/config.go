@@ -18,20 +18,34 @@ func NewParser(path string) (Parser, error) {
 
 	if err != nil {
 		return nil, err
-	} else {
-		return p, nil
 	}
+
+	err = p.parse(true)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return p, nil
 }
 
-func NewParserBytes(data []byte) (Parser, error) {
+// Parse config from a byte slice, without attempting to open repositories
+// paths. Used in unit tests.
+func NewBogusParser(data []byte) (Parser, error) {
 	p := &parser{}
 	err := p.readBytes(data)
 
 	if err != nil {
 		return nil, err
-	} else {
-		return p, nil
 	}
+
+	err = p.parse(false)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return p, nil
 }
 
 type Global struct {
@@ -61,37 +75,23 @@ type parser struct {
 func (p *parser) readBytes(data []byte) error {
 	var err error
 	p.cfg, err = ini.Load(data)
-
-	if err != nil {
-		return err
-	}
-
-	err = p.parse()
-
 	return err
 }
 
 func (p *parser) readFile(path string) error {
 	var err error
 	p.cfg, err = ini.Load(path)
-
-	if err != nil {
-		return err
-	}
-
-	err = p.parse()
-
 	return err
 }
 
-func (p *parser) parse() error {
+func (p *parser) parse(openRepos bool) error {
 	err := p.parseGlobal()
 
 	if err != nil {
 		return err
 	}
 
-	err = p.parseRepos()
+	err = p.parseRepos(openRepos)
 
 	if err != nil {
 		return err
@@ -118,7 +118,7 @@ func (p *parser) parseGlobal() error {
 	return nil
 }
 
-func (p *parser) parseRepos() error {
+func (p *parser) parseRepos(openRepos bool) error {
 	sections := p.cfg.Sections()
 
 	for _, section := range sections {
@@ -127,15 +127,19 @@ func (p *parser) parseRepos() error {
 			continue
 		}
 
-		newRepo, err := models.NewRepo(
+		newRepo := models.NewRepo(
 			section.Name(),
 			section.Key("description").MustString(""),
 			section.Key("path").String(),
 			section.Key("defbranch").MustString("master"),
 		)
 
-		if err != nil {
-			return err
+		if openRepos {
+			err := newRepo.Open()
+
+			if err != nil {
+				return err
+			}
 		}
 
 		p.repos = append(p.repos, newRepo)
