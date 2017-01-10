@@ -17,7 +17,7 @@ func assertUint(t *testing.T, desc string, want, got uint) {
 }
 
 func TestGlobalDefaults(t *testing.T) {
-	cfg, err := NewParserBytes([]byte(""))
+	cfg, err := NewBogusParser([]byte(""))
 
 	if err != nil {
 		t.Log("creating empty config parser failed. error:", err)
@@ -37,7 +37,7 @@ func TestGlobalDefaults(t *testing.T) {
 }
 
 func TestGlobalExample(t *testing.T) {
-	cfg, err := NewParserBytes([]byte(`
+	cfg, err := NewBogusParser([]byte(`
 		title = A GOOD WEB SITE !
 		description = ok it's mediocre
 		addr = 8.8.8.8
@@ -63,4 +63,63 @@ func TestGlobalExample(t *testing.T) {
 	assertStr(t, "Global().StaticPrefix", "/code/staticFiles", global.StaticPrefix)
 	assertStr(t, "Global().StaticDir", "/var/xyz/gong/static", global.StaticDir)
 	assertStr(t, "Global().TemplateDir", "/var/xyz/gong/templates", global.TemplateDir)
+}
+
+func TestNoRepos(t *testing.T) {
+	cfg, err := NewBogusParser([]byte(""))
+
+	if err != nil {
+		t.Log("creating empty config parser failed. error:", err)
+		t.FailNow()
+	}
+
+	if len(cfg.Repos()) > 0 {
+		t.Error("empty config file includes more than zero repositories")
+	}
+}
+
+func TestReposExample(t *testing.T) {
+	repos := map[string]struct {
+		description, path, defbranch string
+	}{
+		"foobity": {"foobities the bar", "/var/git/foobity", "dev"},
+		"a handy tool": {"", "/opt/handy", "dev2"},
+		"🔥":{"it's lit", "lit", "master"},
+		"a-really-long-repository-name-wew-buddy": {"", "/a/painfully/long/repository/path/oh/yeah/keep/going/", "master"},
+	}
+
+	cfg, err := NewBogusParser([]byte(`
+		[foobity]
+		description = foobities the bar
+		path = /var/git/foobity
+		defbranch = dev
+
+		[a handy tool]
+		path = /opt/handy
+		defbranch = dev2
+
+		[🔥]
+		path = lit
+		description = it's lit
+
+		[a-really-long-repository-name-wew-buddy]
+		path = /a/painfully/long/repository/path/oh/yeah/keep/going/
+	`))
+
+	if err != nil {
+		t.Log("creating a config parser against valid config failed. error:", err)
+		t.FailNow()
+	}
+
+	for _, parsed := range cfg.Repos() {
+		wanted, ok := repos[parsed.Name]
+
+		if !ok {
+			t.Error("Unexpected repository", parsed.Name)
+		} else {
+			assertStr(t, "Repo description", wanted.description, parsed.Description)
+			assertStr(t, "Repo path", wanted.path, parsed.Path)
+			assertStr(t, "Repo default branch", wanted.defbranch, parsed.DefaultBranch)
+		}
+	}
 }
