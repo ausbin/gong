@@ -82,9 +82,9 @@ func TestReposExample(t *testing.T) {
 	repos := map[string]struct {
 		description, path, defbranch string
 	}{
-		"foobity": {"foobities the bar", "/var/git/foobity", "dev"},
+		"foobity":      {"foobities the bar", "/var/git/foobity", "dev"},
 		"a handy tool": {"", "/opt/handy", "dev2"},
-		"🔥":{"it's lit", "lit", "master"},
+		"🔥":            {"it's lit", "lit", "master"},
 		"a-really-long-repository-name-wew-buddy": {"", "/a/painfully/long/repository/path/oh/yeah/keep/going/", "master"},
 	}
 
