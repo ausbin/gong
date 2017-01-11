@@ -65,6 +65,18 @@ func TestGlobalExample(t *testing.T) {
 	assertStr(t, "Global().TemplateDir", "/var/xyz/gong/templates", global.TemplateDir)
 }
 
+func TestInvalidPort(t *testing.T) {
+	_, err := NewBogusParser([]byte(`
+		title = a dope git webzone
+		port = this is invalid
+		addr = 8.8.8.8
+	`))
+
+	if err == nil {
+		t.Error("creating a config parser against config with invalid port number succeeded")
+	}
+}
+
 func TestNoRepos(t *testing.T) {
 	cfg, err := NewBogusParser([]byte(""))
 
@@ -121,5 +133,18 @@ func TestReposExample(t *testing.T) {
 			assertStr(t, "Repo path", wanted.path, parsed.Path)
 			assertStr(t, "Repo default branch", wanted.defbranch, parsed.DefaultBranch)
 		}
+	}
+}
+
+func TestRepoWithoutPath(t *testing.T) {
+	_, err := NewBogusParser([]byte(`
+		title = this should fail
+		description = since repos need a path
+
+		[broken]
+	`))
+
+	if err == nil {
+		t.Error("a repo section without a path succeeded")
 	}
 }
