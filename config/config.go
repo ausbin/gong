@@ -2,6 +2,7 @@ package config
 
 import (
 	"code.austinjadams.com/gong/models"
+	"errors"
 	"gopkg.in/ini.v1"
 	"strconv"
 	"strings"
@@ -104,9 +105,24 @@ func (p *parser) parseGlobal() error {
 	// Default section (which will always exist) contains global settings
 	section, _ := p.cfg.GetSection("")
 
+	var port uint
+
+	// Handle three cases: (1) no port given, so use default; (2) valid port
+	// given; and (3) invalid port given, so return the error.
+	// go-ini's MustUint() fails painfully at handling these, particularly (3).
+	// Indeed, if a user supplies an invalid port, it silently fails, falling
+	// back to the default I supply here.
+	if val := section.Key("port").String(); val == "" {
+		port = 8050
+	} else if port_, err := strconv.ParseUint(val, 10, 0); err == nil {
+		port = uint(port_)
+	} else {
+		return err
+	}
+
 	p.global = &Global{
 		Addr:         section.Key("addr").MustString("127.0.0.1"),
-		Port:         section.Key("port").MustUint(8050),
+		Port:         port,
 		Title:        section.Key("title").MustString("gong"),
 		Description:  section.Key("description").MustString("a gong instance"),
 		PathPrefix:   strings.TrimSuffix(section.Key("path_prefix").MustString("/"), "/"),
@@ -127,10 +143,17 @@ func (p *parser) parseRepos(openRepos bool) error {
 			continue
 		}
 
+		name := section.Name()
+		path := section.Key("path").String()
+
+		if path == "" {
+			return errors.New("Must specify path for repository " + name)
+		}
+
 		newRepo := models.NewRepo(
-			section.Name(),
+			name,
 			section.Key("description").MustString(""),
-			section.Key("path").String(),
+			path,
 			section.Key("defbranch").MustString("master"),
 		)
 
