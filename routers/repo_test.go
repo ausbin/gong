@@ -14,20 +14,12 @@ func makeRepoReverser2() url.RepoReverser {
 	return NewRepoReverser("")
 }
 
-func makeRepo1() *models.Repo {
-	// Can't call models.NewRepo() since we don't need/want to open an actual
-	// repository with git2go
-	return &models.Repo{
-		Name: "linux",
-	}
+func makeRepo1() models.Repo {
+	return models.NewRepo("linux", "", "", "")
 }
 
-func makeRepo2() *models.Repo {
-	// Can't call models.NewRepo() since we don't need/want to open an actual
-	// repository with git2go
-	return &models.Repo{
-		Name: "gongitymcgongicus",
-	}
+func makeRepo2() models.Repo {
+	return models.NewRepo("gongitymcgongicus", "", "", "")
 }
 
 func TestRepoReverserRoot(t *testing.T) {
@@ -61,7 +53,7 @@ func TestRepoReverserPlain(t *testing.T) {
 
 	tests := []struct {
 		rev      url.RepoReverser
-		repo     *models.Repo
+		repo     models.Repo
 		path     string
 		expected string
 	}{
@@ -91,7 +83,7 @@ func TestRepoReverserTree(t *testing.T) {
 
 	tests := []struct {
 		rev      url.RepoReverser
-		repo     *models.Repo
+		repo     models.Repo
 		isDir    bool
 		path     string
 		expected string

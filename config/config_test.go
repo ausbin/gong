@@ -124,14 +124,14 @@ func TestReposExample(t *testing.T) {
 	}
 
 	for _, parsed := range cfg.Repos() {
-		wanted, ok := repos[parsed.Name]
+		wanted, ok := repos[parsed.Name()]
 
 		if !ok {
-			t.Error("Unexpected repository", parsed.Name)
+			t.Error("Unexpected repository", parsed.Name())
 		} else {
-			assertStr(t, "Repo description", wanted.description, parsed.Description)
-			assertStr(t, "Repo path", wanted.path, parsed.Path)
-			assertStr(t, "Repo default branch", wanted.defbranch, parsed.DefaultBranch)
+			assertStr(t, "Repo description", wanted.description, parsed.Description())
+			assertStr(t, "Repo path", wanted.path, parsed.Path())
+			assertStr(t, "Repo default branch", wanted.defbranch, parsed.DefaultBranch())
 		}
 	}
 }
