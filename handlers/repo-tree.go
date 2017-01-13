@@ -6,8 +6,6 @@ import (
 	"code.austinjadams.com/gong/templates/ctx"
 	"code.austinjadams.com/gong/templates/url"
 	"html/template"
-	"log"
-	"net/http"
 )
 
 type RepoTree struct {
@@ -21,25 +19,24 @@ func NewRepoTree(cfg *config.Global, url url.Reverser, repo models.Repo, templ *
 	return &RepoTree{cfg, url, repo, templ}
 }
 
-func (rt *RepoTree) Serve(w http.ResponseWriter, r *http.Request, info Info) {
-	path := info.Subtree()
+func (rt *RepoTree) Serve(r Request) {
+	path := r.Subtree()
 	entry, err := rt.repo.Find(rt.repo.DefaultBranch(), path)
 
 	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		r.Error(err)
 		return
 	}
 
 	var files []models.RepoFile
 	var blob string
 
-	endsWithSlash := r.URL.Path[len(r.URL.Path)-1] == '/'
+	endsWithSlash := r.Path()[len(r.Path())-1] == '/'
 
 	if entry.IsDir() {
 		// Since this is a directory, redirect if path does not end in /
 		if !endsWithSlash {
-			http.Redirect(w, r, r.URL.Path+"/", http.StatusMovedPermanently)
+			r.Redirect(r.Path() + "/")
 			return
 		}
 
@@ -47,22 +44,19 @@ func (rt *RepoTree) Serve(w http.ResponseWriter, r *http.Request, info Info) {
 	} else {
 		// Since this is NOT a directory, redirect if path ends in /
 		if endsWithSlash {
-			http.Redirect(w, r, r.URL.Path[:len(r.URL.Path)-1], http.StatusMovedPermanently)
+			r.Redirect(r.Path()[:len(r.Path())-1])
 			return
 		}
 
 		blob, err = rt.repo.GetBlob(entry)
 	}
 
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	if err == nil {
+		ctx := ctx.NewRepoTree(rt.cfg, rt.url, rt.repo, path, entry.IsDir(), files, blob)
+		err = rt.templ.Execute(r, ctx)
 	}
 
-	ctx := ctx.NewRepoTree(rt.cfg, rt.url, rt.repo, path, entry.IsDir(), files, blob)
-	err = rt.templ.Execute(w, ctx)
 	if err != nil {
-		log.Println(err)
+		r.Error(err)
 	}
 }

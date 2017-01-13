@@ -3,8 +3,6 @@ package handlers
 import (
 	"code.austinjadams.com/gong/models"
 	"code.austinjadams.com/gong/templates/url"
-	"log"
-	"net/http"
 )
 
 type RepoPlain struct {
@@ -16,13 +14,13 @@ func NewRepoPlain(url url.Reverser, repo models.Repo) *RepoPlain {
 	return &RepoPlain{url, repo}
 }
 
-func (rp *RepoPlain) Serve(w http.ResponseWriter, r *http.Request, info Info) {
-	if r.URL.Path[len(r.URL.Path)-1] == '/' {
-		http.Redirect(w, r, r.URL.Path[:len(r.URL.Path)-1], http.StatusMovedPermanently)
+func (rp *RepoPlain) Serve(r Request) {
+	if r.Path()[len(r.Path())-1] == '/' {
+		r.Redirect(r.Path()[:len(r.Path())-1])
 		return
 	}
 
-	path := info.Subtree()
+	path := r.Subtree()
 	entry, err := rp.repo.Find(rp.repo.DefaultBranch(), path)
 
 	var blob []byte
@@ -33,12 +31,10 @@ func (rp *RepoPlain) Serve(w http.ResponseWriter, r *http.Request, info Info) {
 	if err == nil {
 		// net/http will call DetectContentType() for us since we didn't set
 		// the Content-Type already
-		_, err = w.Write(blob)
+		_, err = r.Write(blob)
 	}
 
 	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		r.Error(err)
 	}
 }

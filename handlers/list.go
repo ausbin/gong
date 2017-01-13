@@ -6,8 +6,6 @@ import (
 	"code.austinjadams.com/gong/templates/ctx"
 	"code.austinjadams.com/gong/templates/url"
 	"html/template"
-	"log"
-	"net/http"
 )
 
 type List struct {
@@ -21,11 +19,11 @@ func NewList(cfg *config.Global, url url.Reverser, repos []models.Repo, templ *t
 	return &List{cfg, url, repos, templ}
 }
 
-func (l *List) Serve(w http.ResponseWriter, r *http.Request, info Info) {
+func (l *List) Serve(r Request) {
 	ctx := ctx.NewList(l.cfg, l.url, l.repos)
 
-	err := l.templ.Execute(w, ctx)
+	err := l.templ.Execute(r, ctx)
 	if err != nil {
-		log.Println(err)
+		r.Error(err)
 	}
 }

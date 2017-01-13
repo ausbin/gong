@@ -35,9 +35,9 @@ type repo struct {
 	repo              *git.Repository
 }
 
-func (r *repo) Name() string { return r.name }
-func (r *repo) Description() string { return r.description }
-func (r *repo) Path() string { return r.path }
+func (r *repo) Name() string          { return r.name }
+func (r *repo) Description() string   { return r.description }
+func (r *repo) Path() string          { return r.path }
 func (r *repo) DefaultBranch() string { return r.defaultBranch }
 
 func (r *repo) Open() error {

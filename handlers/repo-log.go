@@ -6,8 +6,6 @@ import (
 	"code.austinjadams.com/gong/templates/ctx"
 	"code.austinjadams.com/gong/templates/url"
 	"html/template"
-	"log"
-	"net/http"
 )
 
 type RepoLog struct {
@@ -21,10 +19,10 @@ func NewRepoLog(cfg *config.Global, url url.Reverser, repo models.Repo, templ *t
 	return &RepoLog{cfg, url, repo, templ}
 }
 
-func (rl *RepoLog) Serve(w http.ResponseWriter, r *http.Request, info Info) {
-	err := rl.templ.Execute(w, ctx.NewRepoLog(rl.cfg, rl.url, rl.repo))
+func (rl *RepoLog) Serve(r Request) {
+	err := rl.templ.Execute(r, ctx.NewRepoLog(rl.cfg, rl.url, rl.repo))
 
 	if err != nil {
-		log.Println(err)
+		r.Error(err)
 	}
 }

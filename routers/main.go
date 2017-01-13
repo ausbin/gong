@@ -5,6 +5,7 @@ import (
 	"code.austinjadams.com/gong/handlers"
 	"code.austinjadams.com/gong/templates"
 	"code.austinjadams.com/gong/templates/url"
+	"log"
 	"net/http"
 )
 
@@ -17,8 +18,8 @@ func NewMain(cfg config.Parser, templates templates.Loader) Router {
 
 	// Ideally, the downstream server (nginx, Apache, etc.) would handle
 	// requests to /static/ instead, but this is useful for testing.
-	m.Handle(cfg.Global().StaticPrefix+"/", true,
-		handlers.Adapter(http.StripPrefix(cfg.Global().StaticPrefix, http.FileServer(http.Dir(cfg.Global().StaticDir)))))
+	m.HandleClassic(cfg.Global().StaticPrefix+"/",
+		http.StripPrefix(cfg.Global().StaticPrefix, http.FileServer(http.Dir(cfg.Global().StaticDir))))
 
 	reverser := &reverser{
 		RepoReverser: NewRepoReverser(cfg.Global().PathPrefix),
@@ -38,6 +39,10 @@ func NewMain(cfg config.Parser, templates templates.Loader) Router {
 	return m
 }
 
+func (m *main) HandleClassic(path string, handler http.Handler) {
+	m.mux.Handle(path, handler)
+}
+
 func (m *main) Handle(path string, isSubtree bool, handler handlers.Handler) {
 	m.mux.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
 		// If this route is not a subtree (i.e., if it should not accept
@@ -46,8 +51,7 @@ func (m *main) Handle(path string, isSubtree bool, handler handlers.Handler) {
 		if !isSubtree && len(r.URL.Path) > len(path) {
 			http.NotFound(w, r)
 		} else {
-			subtree := r.URL.Path[len(path)-1:]
-			handler.Serve(w, r, &handlerInfo{subtree})
+			handler.Serve(newHandlerRequest(w, r, path))
 		}
 	})
 }
@@ -56,11 +60,35 @@ func (m *main) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	m.mux.ServeHTTP(w, r)
 }
 
-type handlerInfo struct {
+type handlerRequest struct {
+	writer  http.ResponseWriter
+	request *http.Request
 	subtree string
+	written bool
 }
 
-func (hi *handlerInfo) Subtree() string { return hi.subtree }
+func newHandlerRequest(writer http.ResponseWriter, request *http.Request, registeredPath string) *handlerRequest {
+	subtree := request.URL.Path[len(registeredPath)-1:]
+
+	return &handlerRequest{writer, request, subtree, false}
+}
+
+func (hr *handlerRequest) Path() string    { return hr.request.URL.Path }
+func (hr *handlerRequest) Subtree() string { return hr.subtree }
+func (hr *handlerRequest) Write(data []byte) (int, error) {
+	hr.written = true
+	return hr.writer.Write(data)
+}
+func (hr *handlerRequest) Redirect(path string) {
+	http.Redirect(hr.writer, hr.request, path, http.StatusMovedPermanently)
+}
+func (hr *handlerRequest) Error(err error) {
+	log.Println(err)
+
+	if !hr.written {
+		http.Error(hr.writer, err.Error(), http.StatusInternalServerError)
+	}
+}
 
 type reverser struct {
 	url.RepoReverser

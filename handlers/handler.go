@@ -1,25 +1,22 @@
 package handlers
 
-import (
-	"net/http"
-)
-
 type Handler interface {
-	Serve(w http.ResponseWriter, r *http.Request, info Info)
+	Serve(request Request)
 }
 
-type Info interface {
+type Request interface {
+	// Attributes
+	Path() string
+	// If the registered path for this handler is /X/Y/, return /Z/ for
+	// Path() == /X/Y/Z/
 	Subtree() string
+
+	// Actions
+	Redirect(string)
+	Write([]byte) (int, error)
+	Error(error)
 }
 
-type Func func(w http.ResponseWriter, r *http.Request, info Info)
+type Func func(r Request)
 
-func (f Func) Serve(w http.ResponseWriter, r *http.Request, info Info) {
-	f(w, r, info)
-}
-
-func Adapter(handler http.Handler) Handler {
-	return Func(func(w http.ResponseWriter, r *http.Request, _ Info) {
-		handler.ServeHTTP(w, r)
-	})
-}
+func (f Func) Serve(r Request) { f(r) }

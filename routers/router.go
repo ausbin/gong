@@ -7,6 +7,7 @@ import (
 
 type Router interface {
 	Handle(path string, isSubtree bool, handler handlers.Handler)
+	HandleClassic(path string, handler http.Handler)
 	ServeHTTP(w http.ResponseWriter, r *http.Request)
 }
 

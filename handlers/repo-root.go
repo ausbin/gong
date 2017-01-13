@@ -7,8 +7,6 @@ import (
 	"code.austinjadams.com/gong/templates/url"
 	"github.com/russross/blackfriday"
 	"html/template"
-	"log"
-	"net/http"
 )
 
 type RepoRoot struct {
@@ -22,29 +20,23 @@ func NewRepoRoot(cfg *config.Global, url url.Reverser, repo models.Repo, templ *
 	return &RepoRoot{cfg, url, repo, templ}
 }
 
-func (rr *RepoRoot) Serve(w http.ResponseWriter, r *http.Request, info Info) {
+func (rr *RepoRoot) Serve(r Request) {
 	entry, err := rr.repo.Find(rr.repo.DefaultBranch(), "/")
 
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	var files []models.RepoFile
+	if err == nil {
+		files, err = rr.repo.ListFiles(entry)
 	}
 
-	files, err := rr.repo.ListFiles(entry)
-
-	if err != nil {
-		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	if err == nil {
+		readme, isReadmeHTML := rr.Readme()
+		ctx := ctx.NewRepoRoot(rr.cfg, rr.url, rr.repo, files, readme,
+			isReadmeHTML)
+		err = rr.templ.Execute(r, ctx)
 	}
 
-	readme, isReadmeHTML := rr.Readme()
-
-	ctx := ctx.NewRepoRoot(rr.cfg, rr.url, rr.repo, files, readme, isReadmeHTML)
-	err = rr.templ.Execute(w, ctx)
 	if err != nil {
-		log.Println(err)
+		r.Error(err)
 	}
 }
 
