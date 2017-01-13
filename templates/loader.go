@@ -10,8 +10,12 @@ type Loader interface {
 }
 
 func NewLoader(dir string) (Loader, error) {
+	return newLoader(dir, templatesToLoad)
+}
+
+func newLoader(dir string, templates []loaderTempl) (*loader, error) {
 	l := &loader{dir, make(map[string]*template.Template)}
-	err := l.loadAll(templatesToLoad)
+	err := l.loadAll(templates)
 
 	// Return a nil Loader when an error occurs
 	if err != nil {
