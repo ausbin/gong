@@ -11,11 +11,11 @@ import (
 type Repo struct {
 	cfg       *config.Global
 	url       url.Reverser
-	repo      *models.Repo
+	repo      models.Repo
 	templates templates.Loader
 }
 
-func NewRepo(cfg *config.Global, url url.Reverser, repo *models.Repo, templates templates.Loader) SubRouter {
+func NewRepo(cfg *config.Global, url url.Reverser, repo models.Repo, templates templates.Loader) SubRouter {
 	return &Repo{cfg, url, repo, templates}
 }
 
@@ -40,15 +40,15 @@ func NewRepoReverser(repoPrefix string) url.RepoReverser {
 	return &repoReverser{repoPrefix}
 }
 
-func (r *repoReverser) RepoRoot(repo *models.Repo) string {
-	return r.repoPrefix + "/" + repo.Name + "/"
+func (r *repoReverser) RepoRoot(repo models.Repo) string {
+	return r.repoPrefix + "/" + repo.Name() + "/"
 }
 
-func (r *repoReverser) RepoPlain(repo *models.Repo, path string) string {
+func (r *repoReverser) RepoPlain(repo models.Repo, path string) string {
 	return r.RepoRoot(repo) + "plain" + path
 }
 
-func (r *repoReverser) RepoTree(repo *models.Repo, path string, isDir bool) string {
+func (r *repoReverser) RepoTree(repo models.Repo, path string, isDir bool) string {
 	result := r.RepoRoot(repo) + "tree" + path
 	hasSlash := result[len(result)-1] == '/'
 
@@ -62,10 +62,10 @@ func (r *repoReverser) RepoTree(repo *models.Repo, path string, isDir bool) stri
 	return result
 }
 
-func (r *repoReverser) RepoLog(repo *models.Repo) string {
+func (r *repoReverser) RepoLog(repo models.Repo) string {
 	return r.RepoRoot(repo) + "log/"
 }
 
-func (r *repoReverser) RepoRefs(repo *models.Repo) string {
+func (r *repoReverser) RepoRefs(repo models.Repo) string {
 	return r.RepoRoot(repo) + "refs/"
 }

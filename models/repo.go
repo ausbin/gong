@@ -8,24 +8,45 @@ import (
 	git "github.com/libgit2/git2go"
 )
 
-type Repo struct {
-	Name, Description string
-	Path              string
-	DefaultBranch     string
+type Repo interface {
+	// Attributes
+	Name() string
+	Description() string
+	Path() string
+	DefaultBranch() string
+
+	// Actions
+	Open() error
+	Readme(branch string) *RepoReadme
+	ListFiles(entry *RepoTreeEntry) (files []RepoFile, err error)
+	Find(branch, path string) (rte *RepoTreeEntry, err error)
+	GetBlob(entry *RepoTreeEntry) (result string, err error)
+	GetBlobBytes(entry *RepoTreeEntry) (result []byte, err error)
+}
+
+func NewRepo(name, description, path, defbranch string) Repo {
+	return &repo{name, description, path, defbranch, nil}
+}
+
+type repo struct {
+	name, description string
+	path              string
+	defaultBranch     string
 	repo              *git.Repository
 }
 
-func NewRepo(name, description, path, defbranch string) *Repo {
-	return &Repo{name, description, path, defbranch, nil}
-}
+func (r *repo) Name() string { return r.name }
+func (r *repo) Description() string { return r.description }
+func (r *repo) Path() string { return r.path }
+func (r *repo) DefaultBranch() string { return r.defaultBranch }
 
-func (r *Repo) Open() error {
+func (r *repo) Open() error {
 	var err error
-	r.repo, err = git.OpenRepository(r.Path)
+	r.repo, err = git.OpenRepository(r.path)
 	return err
 }
 
-func (r *Repo) ListFiles(entry *RepoTreeEntry) (result []RepoFile, err error) {
+func (r *repo) ListFiles(entry *RepoTreeEntry) (result []RepoFile, err error) {
 	tree, err := entry.obj.AsTree()
 
 	if err != nil {
@@ -40,7 +61,7 @@ func (r *Repo) ListFiles(entry *RepoTreeEntry) (result []RepoFile, err error) {
 	return
 }
 
-func (r *Repo) GetBlob(entry *RepoTreeEntry) (result string, err error) {
+func (r *repo) GetBlob(entry *RepoTreeEntry) (result string, err error) {
 	bytes, err := r.GetBlobBytes(entry)
 
 	if err != nil {
@@ -51,7 +72,7 @@ func (r *Repo) GetBlob(entry *RepoTreeEntry) (result string, err error) {
 	return
 }
 
-func (r *Repo) GetBlobBytes(entry *RepoTreeEntry) (result []byte, err error) {
+func (r *repo) GetBlobBytes(entry *RepoTreeEntry) (result []byte, err error) {
 	blob, err := entry.obj.AsBlob()
 
 	if err != nil {
@@ -62,7 +83,7 @@ func (r *Repo) GetBlobBytes(entry *RepoTreeEntry) (result []byte, err error) {
 	return
 }
 
-func (r *Repo) Find(branch, path string) (rte *RepoTreeEntry, err error) {
+func (r *repo) Find(branch, path string) (rte *RepoTreeEntry, err error) {
 	ref, err := r.repo.LookupBranch(branch, git.BranchLocal)
 
 	if err != nil {
@@ -148,7 +169,7 @@ func NewRepoReadme(blob []byte, type_ RepoReadmeType) *RepoReadme {
 	return &RepoReadme{blob, type_}
 }
 
-func (r *Repo) Readme(branch string) *RepoReadme {
+func (r *repo) Readme(branch string) *RepoReadme {
 	readmeNames := []struct {
 		name  string
 		type_ RepoReadmeType

@@ -13,11 +13,11 @@ import (
 type List struct {
 	cfg   *config.Global
 	url   url.Reverser
-	repos []*models.Repo
+	repos []models.Repo
 	templ *template.Template
 }
 
-func NewList(cfg *config.Global, url url.Reverser, repos []*models.Repo, templ *template.Template) *List {
+func NewList(cfg *config.Global, url url.Reverser, repos []models.Repo, templ *template.Template) *List {
 	return &List{cfg, url, repos, templ}
 }
 

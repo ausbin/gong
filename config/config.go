@@ -10,7 +10,7 @@ import (
 
 type Parser interface {
 	Global() *Global
-	Repos() []*models.Repo
+	Repos() []models.Repo
 }
 
 func NewParser(path string) (Parser, error) {
@@ -70,7 +70,7 @@ func (g *Global) BindInfo() string {
 type parser struct {
 	cfg    *ini.File
 	global *Global
-	repos  []*models.Repo
+	repos  []models.Repo
 }
 
 func (p *parser) readBytes(data []byte) error {
@@ -175,6 +175,6 @@ func (p *parser) Global() *Global {
 	return p.global
 }
 
-func (p *parser) Repos() []*models.Repo {
+func (p *parser) Repos() []models.Repo {
 	return p.repos
 }

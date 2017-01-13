@@ -18,7 +18,7 @@ type RepoTree interface {
 	Blob() string
 }
 
-func NewRepoTree(cfg *config.Global, url url.Reverser, repo *models.Repo, path string, isListing bool, files []models.RepoFile, blob string) RepoTree {
+func NewRepoTree(cfg *config.Global, url url.Reverser, repo models.Repo, path string, isListing bool, files []models.RepoFile, blob string) RepoTree {
 	return &repoTree{NewRepoGlobal(cfg, url, repo), path, NewPath(path), isListing, files, blob}
 }
 

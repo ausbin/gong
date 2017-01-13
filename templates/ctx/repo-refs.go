@@ -10,7 +10,7 @@ type RepoRefs interface {
 	RepoGlobal
 }
 
-func NewRepoRefs(cfg *config.Global, url url.Reverser, repo *models.Repo) RepoRefs {
+func NewRepoRefs(cfg *config.Global, url url.Reverser, repo models.Repo) RepoRefs {
 	return &repoRefs{NewRepoGlobal(cfg, url, repo)}
 }
 

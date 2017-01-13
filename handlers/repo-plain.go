@@ -9,10 +9,10 @@ import (
 
 type RepoPlain struct {
 	url  url.Reverser
-	repo *models.Repo
+	repo models.Repo
 }
 
-func NewRepoPlain(url url.Reverser, repo *models.Repo) *RepoPlain {
+func NewRepoPlain(url url.Reverser, repo models.Repo) *RepoPlain {
 	return &RepoPlain{url, repo}
 }
 
@@ -23,7 +23,7 @@ func (rp *RepoPlain) Serve(w http.ResponseWriter, r *http.Request, info Info) {
 	}
 
 	path := info.Subtree()
-	entry, err := rp.repo.Find(rp.repo.DefaultBranch, path)
+	entry, err := rp.repo.Find(rp.repo.DefaultBranch(), path)
 
 	var blob []byte
 	if err == nil {

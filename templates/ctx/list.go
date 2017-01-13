@@ -9,17 +9,17 @@ import (
 type List interface {
 	Global
 
-	Repos() []*models.Repo
+	Repos() []models.Repo
 }
 
-func NewList(cfg *config.Global, url url.Reverser, repos []*models.Repo) List {
+func NewList(cfg *config.Global, url url.Reverser, repos []models.Repo) List {
 	return &list{NewGlobal(cfg, url), repos}
 }
 
 type list struct {
 	Global
 
-	repos []*models.Repo
+	repos []models.Repo
 }
 
-func (l *list) Repos() []*models.Repo { return l.repos }
+func (l *list) Repos() []models.Repo { return l.repos }

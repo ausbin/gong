@@ -13,17 +13,17 @@ import (
 type RepoTree struct {
 	cfg   *config.Global
 	url   url.Reverser
-	repo  *models.Repo
+	repo  models.Repo
 	templ *template.Template
 }
 
-func NewRepoTree(cfg *config.Global, url url.Reverser, repo *models.Repo, templ *template.Template) *RepoTree {
+func NewRepoTree(cfg *config.Global, url url.Reverser, repo models.Repo, templ *template.Template) *RepoTree {
 	return &RepoTree{cfg, url, repo, templ}
 }
 
 func (rt *RepoTree) Serve(w http.ResponseWriter, r *http.Request, info Info) {
 	path := info.Subtree()
-	entry, err := rt.repo.Find(rt.repo.DefaultBranch, path)
+	entry, err := rt.repo.Find(rt.repo.DefaultBranch(), path)
 
 	if err != nil {
 		log.Println(err)

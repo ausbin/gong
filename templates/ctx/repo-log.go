@@ -10,7 +10,7 @@ type RepoLog interface {
 	RepoGlobal
 }
 
-func NewRepoLog(cfg *config.Global, url url.Reverser, repo *models.Repo) RepoLog {
+func NewRepoLog(cfg *config.Global, url url.Reverser, repo models.Repo) RepoLog {
 	return &repoLog{NewRepoGlobal(cfg, url, repo)}
 }
 

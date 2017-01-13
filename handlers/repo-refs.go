@@ -13,11 +13,11 @@ import (
 type RepoRefs struct {
 	cfg   *config.Global
 	url   url.Reverser
-	repo  *models.Repo
+	repo  models.Repo
 	templ *template.Template
 }
 
-func NewRepoRefs(cfg *config.Global, url url.Reverser, repo *models.Repo, templ *template.Template) *RepoRefs {
+func NewRepoRefs(cfg *config.Global, url url.Reverser, repo models.Repo, templ *template.Template) *RepoRefs {
 	return &RepoRefs{cfg, url, repo, templ}
 }
 

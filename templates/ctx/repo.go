@@ -11,17 +11,17 @@ import (
 type RepoGlobal interface {
 	Global
 
-	Repo() *models.Repo
+	Repo() models.Repo
 }
 
-func NewRepoGlobal(cfg *config.Global, url url.Reverser, repo *models.Repo) RepoGlobal {
+func NewRepoGlobal(cfg *config.Global, url url.Reverser, repo models.Repo) RepoGlobal {
 	return &repoGlobal{NewGlobal(cfg, url), repo}
 }
 
 type repoGlobal struct {
 	Global
 
-	repo *models.Repo
+	repo models.Repo
 }
 
-func (r *repoGlobal) Repo() *models.Repo { return r.repo }
+func (r *repoGlobal) Repo() models.Repo { return r.repo }

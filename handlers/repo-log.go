@@ -13,11 +13,11 @@ import (
 type RepoLog struct {
 	cfg   *config.Global
 	url   url.Reverser
-	repo  *models.Repo
+	repo  models.Repo
 	templ *template.Template
 }
 
-func NewRepoLog(cfg *config.Global, url url.Reverser, repo *models.Repo, templ *template.Template) *RepoLog {
+func NewRepoLog(cfg *config.Global, url url.Reverser, repo models.Repo, templ *template.Template) *RepoLog {
 	return &RepoLog{cfg, url, repo, templ}
 }
 
