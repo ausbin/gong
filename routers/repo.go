@@ -21,15 +21,15 @@ func NewRepo(cfg *config.Global, url url.Reverser, repo models.Repo, templates t
 
 func (r *Repo) ConfigureRouter(superRouter Router) {
 	superRouter.Handle(r.url.RepoRoot(r.repo), false,
-		handlers.NewRepoRoot(r.cfg, r.url, r.repo, r.templates.Get("repo-root")))
+		handlers.NewRepoRoot(r.cfg, r.url, r.repo, r.templates.Consumer("repo-root")))
 	superRouter.Handle(r.url.RepoPlain(r.repo, "/"), true,
 		handlers.NewRepoPlain(r.url, r.repo))
 	superRouter.Handle(r.url.RepoTree(r.repo, "/", true), true,
-		handlers.NewRepoTree(r.cfg, r.url, r.repo, r.templates.Get("repo-tree")))
+		handlers.NewRepoTree(r.cfg, r.url, r.repo, r.templates.Consumer("repo-tree")))
 	superRouter.Handle(r.url.RepoLog(r.repo), false,
-		handlers.NewRepoLog(r.cfg, r.url, r.repo, r.templates.Get("repo-log")))
+		handlers.NewRepoLog(r.cfg, r.url, r.repo, r.templates.Consumer("repo-log")))
 	superRouter.Handle(r.url.RepoRefs(r.repo), false,
-		handlers.NewRepoRefs(r.cfg, r.url, r.repo, r.templates.Get("repo-refs")))
+		handlers.NewRepoRefs(r.cfg, r.url, r.repo, r.templates.Consumer("repo-refs")))
 }
 
 type repoReverser struct {

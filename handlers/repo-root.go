@@ -6,18 +6,17 @@ import (
 	"code.austinjadams.com/gong/templates/ctx"
 	"code.austinjadams.com/gong/templates/url"
 	"github.com/russross/blackfriday"
-	"html/template"
 )
 
 type RepoRoot struct {
-	cfg   *config.Global
-	url   url.Reverser
-	repo  models.Repo
-	templ *template.Template
+	cfg      *config.Global
+	url      url.Reverser
+	repo     models.Repo
+	consumer ctx.Consumer
 }
 
-func NewRepoRoot(cfg *config.Global, url url.Reverser, repo models.Repo, templ *template.Template) *RepoRoot {
-	return &RepoRoot{cfg, url, repo, templ}
+func NewRepoRoot(cfg *config.Global, url url.Reverser, repo models.Repo, consumer ctx.Consumer) *RepoRoot {
+	return &RepoRoot{cfg, url, repo, consumer}
 }
 
 func (rr *RepoRoot) Serve(r Request) {
@@ -32,7 +31,7 @@ func (rr *RepoRoot) Serve(r Request) {
 		readme, isReadmeHTML := rr.Readme()
 		ctx := ctx.NewRepoRoot(rr.cfg, rr.url, rr.repo, files, readme,
 			isReadmeHTML)
-		err = rr.templ.Execute(r, ctx)
+		err = rr.consumer.Consume(r, ctx)
 	}
 
 	if err != nil {

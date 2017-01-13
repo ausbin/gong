@@ -17,10 +17,26 @@ func newBogusLoader(templates []loaderTempl) (*loader, error) {
 	return newLoader(templateDir, templates)
 }
 
-func TestEmptyLoader(t *testing.T) {
+func TestEmptyLoaderGet(t *testing.T) {
 	defer func() {
 		if r := recover(); r == nil {
 			t.Error("Get()ing from an unitialized Loader did not cause a panic")
+		}
+	}()
+
+	loader, err := newBogusLoader(nil)
+
+	if err != nil {
+		t.Error("creating an empty loader failed")
+	}
+
+	loader.Get(templateEmpty)
+}
+
+func TestEmptyLoaderConsumer(t *testing.T) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Error("calling Consumer()ing on an unitialized Loader did not cause a panic")
 		}
 	}()
 

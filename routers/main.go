@@ -34,7 +34,7 @@ func NewMain(cfg config.Parser, templates templates.Loader) Router {
 
 	// Show a repository listing at /
 	m.Handle(reverser.Root(), false,
-		handlers.NewList(cfg.Global(), reverser, cfg.Repos(), templates.Get("list")))
+		handlers.NewList(cfg.Global(), reverser, cfg.Repos(), templates.Consumer("list")))
 
 	return m
 }

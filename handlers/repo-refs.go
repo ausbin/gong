@@ -5,22 +5,21 @@ import (
 	"code.austinjadams.com/gong/models"
 	"code.austinjadams.com/gong/templates/ctx"
 	"code.austinjadams.com/gong/templates/url"
-	"html/template"
 )
 
 type RepoRefs struct {
-	cfg   *config.Global
-	url   url.Reverser
-	repo  models.Repo
-	templ *template.Template
+	cfg      *config.Global
+	url      url.Reverser
+	repo     models.Repo
+	consumer ctx.Consumer
 }
 
-func NewRepoRefs(cfg *config.Global, url url.Reverser, repo models.Repo, templ *template.Template) *RepoRefs {
-	return &RepoRefs{cfg, url, repo, templ}
+func NewRepoRefs(cfg *config.Global, url url.Reverser, repo models.Repo, consumer ctx.Consumer) *RepoRefs {
+	return &RepoRefs{cfg, url, repo, consumer}
 }
 
 func (rr *RepoRefs) Serve(r Request) {
-	err := rr.templ.Execute(r, ctx.NewRepoRefs(rr.cfg, rr.url, rr.repo))
+	err := rr.consumer.Consume(r, ctx.NewRepoRefs(rr.cfg, rr.url, rr.repo))
 
 	if err != nil {
 		r.Error(err)

@@ -5,18 +5,17 @@ import (
 	"code.austinjadams.com/gong/models"
 	"code.austinjadams.com/gong/templates/ctx"
 	"code.austinjadams.com/gong/templates/url"
-	"html/template"
 )
 
 type RepoTree struct {
-	cfg   *config.Global
-	url   url.Reverser
-	repo  models.Repo
-	templ *template.Template
+	cfg      *config.Global
+	url      url.Reverser
+	repo     models.Repo
+	consumer ctx.Consumer
 }
 
-func NewRepoTree(cfg *config.Global, url url.Reverser, repo models.Repo, templ *template.Template) *RepoTree {
-	return &RepoTree{cfg, url, repo, templ}
+func NewRepoTree(cfg *config.Global, url url.Reverser, repo models.Repo, consumer ctx.Consumer) *RepoTree {
+	return &RepoTree{cfg, url, repo, consumer}
 }
 
 func (rt *RepoTree) Serve(r Request) {
@@ -53,7 +52,7 @@ func (rt *RepoTree) Serve(r Request) {
 
 	if err == nil {
 		ctx := ctx.NewRepoTree(rt.cfg, rt.url, rt.repo, path, entry.IsDir(), files, blob)
-		err = rt.templ.Execute(r, ctx)
+		err = rt.consumer.Consume(r, ctx)
 	}
 
 	if err != nil {

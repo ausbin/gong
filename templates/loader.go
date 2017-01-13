@@ -1,12 +1,14 @@
 package templates
 
 import (
+	"code.austinjadams.com/gong/templates/ctx"
 	"errors"
 	"html/template"
 )
 
 type Loader interface {
 	Get(name string) *template.Template
+	Consumer(name string) ctx.Consumer
 }
 
 func NewLoader(dir string) (Loader, error) {
@@ -63,6 +65,10 @@ func (l *loader) Get(name string) *template.Template {
 	} else {
 		return t
 	}
+}
+
+func (l *loader) Consumer(name string) ctx.Consumer {
+	return ctx.NewConsumer(l.Get(name))
 }
 
 type loaderTempl struct {

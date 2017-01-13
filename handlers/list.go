@@ -5,24 +5,23 @@ import (
 	"code.austinjadams.com/gong/models"
 	"code.austinjadams.com/gong/templates/ctx"
 	"code.austinjadams.com/gong/templates/url"
-	"html/template"
 )
 
 type List struct {
-	cfg   *config.Global
-	url   url.Reverser
-	repos []models.Repo
-	templ *template.Template
+	cfg      *config.Global
+	url      url.Reverser
+	repos    []models.Repo
+	consumer ctx.Consumer
 }
 
-func NewList(cfg *config.Global, url url.Reverser, repos []models.Repo, templ *template.Template) *List {
-	return &List{cfg, url, repos, templ}
+func NewList(cfg *config.Global, url url.Reverser, repos []models.Repo, consumer ctx.Consumer) *List {
+	return &List{cfg, url, repos, consumer}
 }
 
 func (l *List) Serve(r Request) {
 	ctx := ctx.NewList(l.cfg, l.url, l.repos)
 
-	err := l.templ.Execute(r, ctx)
+	err := l.consumer.Consume(r, ctx)
 	if err != nil {
 		r.Error(err)
 	}
