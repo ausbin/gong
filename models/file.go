@@ -11,6 +11,7 @@ type RepoFile interface {
 	IsDir() bool
 	IsExecutable() bool
 	Size() int64
+	Equals(RepoFile) bool
 }
 
 type repoFile struct {
@@ -44,4 +45,12 @@ func (f repoFile) Size() int64 {
 		log.Println("Warning: Could not read size of tree entry", f.entry.Id, "error:", err)
 		return -1
 	}
+}
+
+func (f repoFile) Equals(other RepoFile) bool {
+	return f.Name() == other.Name() &&
+		f.IsFile() == other.IsFile() &&
+		f.IsDir() == other.IsDir() &&
+		f.IsExecutable() == other.IsExecutable() &&
+		f.Size() == other.Size()
 }

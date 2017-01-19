@@ -56,10 +56,49 @@ func (t *repoTree) Dirname() string {
 	}
 }
 
+// XXX Don't
+func (t *repoTree) pathComponentsEqual(a, b []PathComponent) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if !a[i].Equals(b[i]) {
+			return false
+		}
+	}
+	return true
+}
+
+func (t *repoTree) filesEqual(a, b []models.RepoFile) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if !a[i].Equals(b[i]) {
+			return false
+		}
+	}
+	return true
+}
+
+func (t *repoTree) Equals(other Global) bool {
+	otherTree, ok := other.(RepoRoot)
+
+	return ok && t.RepoGlobal.Equals(other) &&
+		t.IsRoot() == otherTree.IsRoot() &&
+		t.Dirname() == otherTree.Dirname() &&
+		t.pathComponentsEqual(t.SplitPath(), otherTree.SplitPath()) &&
+		t.Path() == otherTree.Path() &&
+		t.IsListing() == otherTree.IsListing() &&
+		t.filesEqual(t.Files(), otherTree.Files()) &&
+		t.Blob() == otherTree.Blob()
+}
+
 type PathComponent interface {
 	Name() string
 	FullPath() string
 	IsLast() bool
+	Equals(PathComponent) bool
 }
 
 func NewPath(path string) []PathComponent {
@@ -97,4 +136,10 @@ func (p *pathComponent) FullPath() string {
 
 func (p *pathComponent) IsLast() bool {
 	return p.start+p.length >= len(p.full)-1
+}
+
+func (p *pathComponent) Equals(other PathComponent) bool {
+	return p.Name() == other.Name() &&
+		p.FullPath() == other.FullPath() &&
+		p.IsLast() == other.IsLast()
 }

@@ -22,6 +22,7 @@ type Repo interface {
 	Find(branch, path string) (rte *RepoTreeEntry, err error)
 	GetBlob(entry *RepoTreeEntry) (result string, err error)
 	GetBlobBytes(entry *RepoTreeEntry) (result []byte, err error)
+	Equals(other Repo) bool
 }
 
 func NewRepo(name, description, path, defbranch string) Repo {
@@ -144,6 +145,13 @@ func (r *repo) Find(branch, path string) (rte *RepoTreeEntry, err error) {
 	rte = &RepoTreeEntry{obj: obj}
 
 	return
+}
+
+func (r *repo) Equals(other Repo) bool {
+	return r.Name() == other.Name() &&
+		r.Description() == r.Description() &&
+		r.Path() == r.Path() &&
+		r.DefaultBranch() == r.DefaultBranch()
 }
 
 type RepoTreeEntry struct {

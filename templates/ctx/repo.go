@@ -25,3 +25,10 @@ type repoGlobal struct {
 }
 
 func (r *repoGlobal) Repo() models.Repo { return r.repo }
+
+func (r *repoGlobal) Equals(other Global) bool {
+	otherGlobal, ok := other.(RepoGlobal)
+
+	return ok && r.Global.Equals(other) &&
+		r.Repo() == otherGlobal.Repo()
+}

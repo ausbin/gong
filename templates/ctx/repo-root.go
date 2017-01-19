@@ -40,3 +40,11 @@ func (r *repoRoot) ReadmeHTML() template.HTML {
 		return template.HTML("")
 	}
 }
+
+func (r *repoRoot) Equals(other Global) bool {
+	otherRoot, ok := other.(RepoRoot)
+
+	return ok && r.RepoTree.Equals(other) &&
+		r.ReadmePlain() == otherRoot.ReadmePlain() &&
+		r.ReadmeHTML() == otherRoot.ReadmeHTML()
+}
