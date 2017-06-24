@@ -157,6 +157,12 @@ header {
     padding: 0;
 }
 
+#files td.filemode {
+    /* For some reason, browsers want to wrap the mode column, so
+       politely ask them not to */
+    white-space: nowrap;
+}
+
 #files td.filename {
     padding: 0 8px;
     width: 100%;
