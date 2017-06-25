@@ -86,9 +86,43 @@ header {
     border-radius: 2px;
     font-family: monospace;
     font-size: 12px;
-    overflow-x: auto;
     padding: 8px;
+    position: relative;
     text-align: left;
+}
+
+/* Code blocks */
+#container pre code {
+    /* Needed for the overflow-x directive below to work */
+    display: block;
+    /* Set this here instead of on the <pre> so the line numbers
+       positioned outside the bounds of the <pre> are visible */
+    overflow-x: auto;
+}
+
+/* Line numbers for code blocks */
+#container pre span.line a {
+    color: #999;
+    /* This means, "take me out of layout and position me relative to
+       the nearest parent ancestor with position: relative or absolute."
+       Currently, this ancestor is the <pre> block. */
+    position: absolute;
+    left: -64px;
+    width: 64px;
+    text-align: right;
+    text-decoration: none;
+}
+
+/* Putting the line numbers themselves in a CSS pseudo-element hits two
+   birds with one stone:
+   1. highlightjs won't recognize the line numbers and try to highlight
+      them along with the code.
+   2. They are unselectable, so selecting some of the blob text and
+      copying it doesn't leave you with a bunch of unwanted line numbers
+      in your clipboard. */
+#container pre span.line a::before {
+    content: attr(data-line-num);
+    margin-right: 8px;
 }
 
 #list {

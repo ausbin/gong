@@ -29,7 +29,7 @@
         If the last line is empty, it's just a newline at the end of
         the file, so don't print an empty line for it
     */}}{{ if or (lt $lineNum (len $lines)) $line }}{{/*
-      */}}<span class="line" id="n{{ $lineNum }}">{{ $line }}</span>{{"\n"}}{{/*
+      */}}<span id="n{{ $lineNum }}" class="line"><a href="#n{{ $lineNum }}" data-line-num="{{ $lineNum }}"></a><span class="line-contents">{{ $line }}</span></span>{{"\n"}}{{/*
     */}}{{ end }}{{/*
   */}}{{ end }}{{/*
 */}}</code></pre>
