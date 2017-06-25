@@ -52,7 +52,13 @@ func (l *loader) get(name string) (*template.Template, bool) {
 	return t, ok
 }
 
+func (l *loader) configureTemplate(templ *template.Template) {
+	// Add extra helper functions
+	templ.Funcs(funcMap)
+}
+
 func (l *loader) add(name string, templ *template.Template) {
+	l.configureTemplate(templ)
 	l.templates[name] = templ
 }
 
