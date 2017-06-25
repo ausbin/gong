@@ -7,10 +7,12 @@ package templates
 
 import (
 	"html/template"
+	"strings"
 )
 
 var funcMap = template.FuncMap{
 	"add": func(a, b int) int {
 		return a + b
 	},
+	"split": strings.Split,
 }
