@@ -20,7 +20,8 @@
 {{ end }}
 {{ define "repo-body" }}
   {{ if not .IsListing }}
-    <pre><code>{{ .Blob }}</code></pre>
+    <pre><code>{{ range $lineNum, $line := (split .Blob "\n") }}<span class="line" id="n{{ add $lineNum 1 }}">{{ $line }}</span>
+{{ end }}</code></pre>
   {{ end }}
 {{ end }}
 
