@@ -14,6 +14,6 @@ var funcMap = template.FuncMap{
 	"add": func(a, b int) int {
 		return a + b
 	},
-	"split": strings.Split,
+	"split":      strings.Split,
 	"trimsuffix": strings.TrimSuffix,
 }

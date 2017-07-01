@@ -26,6 +26,7 @@
   */}}{{ $lines := (split .Blob "\n") }}{{/*
   */}}{{ range $index, $line := $lines }}{{/*
     */}}{{ $lineNum := (add $index 1) }}{{/*
+    */}}{{ $line := (trimsuffix $line "\r") }}{{/*
         If the last line is empty, it's just a newline at the end of
         the file, so don't print an empty line for it
     */}}{{ if or (lt $lineNum (len $lines)) $line }}{{/*
