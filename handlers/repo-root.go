@@ -20,11 +20,11 @@ func NewRepoRoot(cfg *config.Global, url url.Reverser, repo models.Repo, consume
 }
 
 func (rr *RepoRoot) Serve(r Request) {
-	entry, err := rr.repo.Find(rr.repo.DefaultBranch(), "/")
+	file, err := rr.repo.Find(rr.repo.DefaultBranch(), "/")
 
 	var files []models.RepoFile
 	if err == nil {
-		files, err = rr.repo.ListFiles(entry)
+		files, err = file.ListFiles()
 	}
 
 	if err == nil {

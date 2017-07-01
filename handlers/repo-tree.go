@@ -20,7 +20,7 @@ func NewRepoTree(cfg *config.Global, url url.Reverser, repo models.Repo, consume
 
 func (rt *RepoTree) Serve(r Request) {
 	path := r.Subtree()
-	entry, err := rt.repo.Find(rt.repo.DefaultBranch(), path)
+	file, err := rt.repo.Find(rt.repo.DefaultBranch(), path)
 
 	if err != nil {
 		r.Error(err)
@@ -32,14 +32,14 @@ func (rt *RepoTree) Serve(r Request) {
 
 	endsWithSlash := r.Path()[len(r.Path())-1] == '/'
 
-	if entry.IsDir() {
+	if file.IsDir() {
 		// Since this is a directory, redirect if path does not end in /
 		if !endsWithSlash {
 			r.Redirect(r.Path() + "/")
 			return
 		}
 
-		files, err = rt.repo.ListFiles(entry)
+		files, err = file.ListFiles()
 	} else {
 		// Since this is NOT a directory, redirect if path ends in /
 		if endsWithSlash {
@@ -47,11 +47,11 @@ func (rt *RepoTree) Serve(r Request) {
 			return
 		}
 
-		blob, err = rt.repo.GetBlob(entry)
+		blob, err = file.GetBlob()
 	}
 
 	if err == nil {
-		ctx := ctx.NewRepoTree(rt.cfg, rt.url, rt.repo, path, entry.IsDir(), files, blob)
+		ctx := ctx.NewRepoTree(rt.cfg, rt.url, rt.repo, path, file.IsDir(), files, blob)
 		err = rt.consumer.Consume(r, ctx)
 	}
 

@@ -18,10 +18,7 @@ type Repo interface {
 	// Actions
 	Open() error
 	Readme(branch string) *RepoReadme
-	ListFiles(entry *RepoTreeEntry) (files []RepoFile, err error)
-	Find(branch, path string) (rte *RepoTreeEntry, err error)
-	GetBlob(entry *RepoTreeEntry) (result string, err error)
-	GetBlobBytes(entry *RepoTreeEntry) (result []byte, err error)
+	Find(branch, path string) (RepoFile, error)
 	Equals(other Repo) bool
 }
 
@@ -47,44 +44,7 @@ func (r *repo) Open() error {
 	return err
 }
 
-func (r *repo) ListFiles(entry *RepoTreeEntry) (result []RepoFile, err error) {
-	tree, err := entry.obj.AsTree()
-
-	if err != nil {
-		return
-	}
-
-	tree.Walk(func(_ string, entry *git.TreeEntry) int {
-		result = append(result, &repoFile{r.repo, entry})
-		return 1
-	})
-
-	return
-}
-
-func (r *repo) GetBlob(entry *RepoTreeEntry) (result string, err error) {
-	bytes, err := r.GetBlobBytes(entry)
-
-	if err != nil {
-		return
-	}
-
-	result = string(bytes)
-	return
-}
-
-func (r *repo) GetBlobBytes(entry *RepoTreeEntry) (result []byte, err error) {
-	blob, err := entry.obj.AsBlob()
-
-	if err != nil {
-		return
-	}
-
-	result = blob.Contents()
-	return
-}
-
-func (r *repo) Find(branch, path string) (rte *RepoTreeEntry, err error) {
+func (r *repo) Find(branch, path string) (f RepoFile, err error) {
 	ref, err := r.repo.LookupBranch(branch, git.BranchLocal)
 
 	if err != nil {
@@ -109,13 +69,12 @@ func (r *repo) Find(branch, path string) (rte *RepoTreeEntry, err error) {
 		return
 	}
 
-	var obj *git.Object
-
 	// If we want the tree at the root of the repository, return because
 	// we have it. Otherwise, search the root tree for the tree of the
 	// desired directory
 	if path == "" || path == "/" {
-		obj = &tree.Object
+		// Root of the tree does not have a tree entry, so fake one
+		f = newRepoFile(r.repo, "/", tree.Id(), git.ObjectTree, git.FilemodeTree)
 	} else {
 		// In case path points to a blob instead of a tree, choose to remove a
 		// trailing slash if present
@@ -135,14 +94,8 @@ func (r *repo) Find(branch, path string) (rte *RepoTreeEntry, err error) {
 			return
 		}
 
-		obj, err = r.repo.Lookup(entry.Id)
-
-		if err != nil {
-			return
-		}
+		f = newRepoFileFromTreeEntry(r.repo, entry)
 	}
-
-	rte = &RepoTreeEntry{obj: obj}
 
 	return
 }
@@ -152,14 +105,6 @@ func (r *repo) Equals(other Repo) bool {
 		r.Description() == r.Description() &&
 		r.Path() == r.Path() &&
 		r.DefaultBranch() == r.DefaultBranch()
-}
-
-type RepoTreeEntry struct {
-	obj *git.Object
-}
-
-func (rte *RepoTreeEntry) IsDir() bool {
-	return rte.obj.Type() == git.ObjectTree
 }
 
 const (
@@ -187,12 +132,12 @@ func (r *repo) Readme(branch string) *RepoReadme {
 	}
 
 	for _, name := range readmeNames {
-		entry, err := r.Find(branch, name.name)
+		file, err := r.Find(branch, name.name)
 
 		// XXX Handle errors more carefully. err != nil does not
 		//     necessarily mean the file doesn't exist in the tree
 		if err == nil {
-			blob, err := r.GetBlobBytes(entry)
+			blob, err := file.GetBlobBytes()
 
 			if err == nil {
 				return NewRepoReadme(blob, name.type_)

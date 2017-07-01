@@ -21,11 +21,11 @@ func (rp *RepoPlain) Serve(r Request) {
 	}
 
 	path := r.Subtree()
-	entry, err := rp.repo.Find(rp.repo.DefaultBranch(), path)
+	file, err := rp.repo.Find(rp.repo.DefaultBranch(), path)
 
 	var blob []byte
 	if err == nil {
-		blob, err = rp.repo.GetBlobBytes(entry)
+		blob, err = file.GetBlobBytes()
 	}
 
 	if err == nil {
