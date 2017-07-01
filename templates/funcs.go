@@ -15,4 +15,5 @@ var funcMap = template.FuncMap{
 		return a + b
 	},
 	"split": strings.Split,
+	"trimsuffix": strings.TrimSuffix,
 }
