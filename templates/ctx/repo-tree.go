@@ -14,12 +14,14 @@ type RepoTree interface {
 	SplitPath() []PathComponent
 	Path() string
 	IsListing() bool
+	IsBinary() bool
+	IsImage() bool
 	Files() []models.RepoFile
 	Blob() string
 }
 
-func NewRepoTree(cfg *config.Global, url url.Reverser, repo models.Repo, path string, isListing bool, files []models.RepoFile, blob string) RepoTree {
-	return &repoTree{NewRepoGlobal(cfg, url, repo), path, NewPath(path), isListing, files, blob}
+func NewRepoTree(cfg *config.Global, url url.Reverser, repo models.Repo, path string, isListing bool, isBinary bool, isImage bool, files []models.RepoFile, blob string) RepoTree {
+	return &repoTree{NewRepoGlobal(cfg, url, repo), path, NewPath(path), isListing, isBinary, isImage, files, blob}
 }
 
 type repoTree struct {
@@ -28,12 +30,16 @@ type repoTree struct {
 	path      string
 	splitPath []PathComponent
 	isListing bool
+	isBinary  bool
+	isImage   bool
 	files     []models.RepoFile
 	blob      string
 }
 
 func (t *repoTree) Path() string             { return t.path }
 func (t *repoTree) IsListing() bool          { return t.isListing }
+func (t *repoTree) IsBinary() bool           { return t.isBinary }
+func (t *repoTree) IsImage() bool            { return t.isImage }
 func (t *repoTree) Files() []models.RepoFile { return t.files }
 func (t *repoTree) Blob() string             { return t.blob }
 
@@ -90,6 +96,8 @@ func (t *repoTree) Equals(other Global) bool {
 		t.pathComponentsEqual(t.SplitPath(), otherTree.SplitPath()) &&
 		t.Path() == otherTree.Path() &&
 		t.IsListing() == otherTree.IsListing() &&
+		t.IsBinary() == otherTree.IsBinary() &&
+		t.IsImage() == otherTree.IsImage() &&
 		t.filesEqual(t.Files(), otherTree.Files()) &&
 		t.Blob() == otherTree.Blob()
 }

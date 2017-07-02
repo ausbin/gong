@@ -5,6 +5,8 @@ import (
 	"code.austinjadams.com/gong/models"
 	"code.austinjadams.com/gong/templates/ctx"
 	"code.austinjadams.com/gong/templates/url"
+	"net/http"
+	"strings"
 )
 
 type RepoTree struct {
@@ -29,6 +31,7 @@ func (rt *RepoTree) Serve(r Request) {
 
 	var files []models.RepoFile
 	var blob string
+	var isBinary, isImage bool
 
 	endsWithSlash := r.Path()[len(r.Path())-1] == '/'
 
@@ -47,11 +50,20 @@ func (rt *RepoTree) Serve(r Request) {
 			return
 		}
 
-		blob, err = file.GetBlob()
+		blob_bytes, err := file.GetBlobBytes()
+
+		if err == nil {
+			// Sniff the blob's mime type
+			mime_type := http.DetectContentType(blob_bytes)
+			isBinary = !strings.HasPrefix(mime_type, "text/")
+			isImage = strings.HasPrefix(mime_type, "image/")
+
+			blob = string(blob_bytes)
+		}
 	}
 
 	if err == nil {
-		ctx := ctx.NewRepoTree(rt.cfg, rt.url, rt.repo, path, file.IsDir(), files, blob)
+		ctx := ctx.NewRepoTree(rt.cfg, rt.url, rt.repo, path, file.IsDir(), isBinary, isImage, files, blob)
 		err = rt.consumer.Consume(r, ctx)
 	}
 

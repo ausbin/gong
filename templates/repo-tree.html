@@ -20,20 +20,28 @@
 {{ end }}
 {{ define "repo-body" }}
   {{ if not .IsListing }}
-    {{/* Ugly comments are needed here since this is a <pre>, which will
-         preserve whitespace left between our template tags */}}
-    <pre id="blob"><code>{{/*
-  */}}{{ $lines := (split .Blob "\n") }}{{/*
-  */}}{{ range $index, $line := $lines }}{{/*
-    */}}{{ $lineNum := (add $index 1) }}{{/*
-    */}}{{ $line := (trimsuffix $line "\r") }}{{/*
-        If the last line is empty, it's just a newline at the end of
-        the file, so don't print an empty line for it
-    */}}{{ if or (lt $lineNum (len $lines)) $line }}{{/*
-      */}}<span id="n{{ $lineNum }}" class="line"><a href="#n{{ $lineNum }}" data-line-num="{{ $lineNum }}"></a><span class="line-contents">{{ $line }}</span></span>{{"\n"}}{{/*
+    {{ if .IsBinary }}
+        {{ if .IsImage }}
+            <img src="{{ .URL.RepoPlain .Repo .Path }}" alt="image: {{ .Path }}" />
+        {{ else }}
+            <p>don't know how to display binary data yet, sorry</p>
+        {{ end }}
+    {{ else }}
+      {{/* Ugly comments are needed here since this is a <pre>, which will
+           preserve whitespace left between our template tags */}}
+      <pre id="blob"><code>{{/*
+    */}}{{ $lines := (split .Blob "\n") }}{{/*
+    */}}{{ range $index, $line := $lines }}{{/*
+      */}}{{ $lineNum := (add $index 1) }}{{/*
+      */}}{{ $line := (trimsuffix $line "\r") }}{{/*
+          If the last line is empty, it's just a newline at the end of
+          the file, so don't print an empty line for it
+      */}}{{ if or (lt $lineNum (len $lines)) $line }}{{/*
+        */}}<span id="n{{ $lineNum }}" class="line"><a href="#n{{ $lineNum }}" data-line-num="{{ $lineNum }}"></a><span class="line-contents">{{ $line }}</span></span>{{"\n"}}{{/*
+      */}}{{ end }}{{/*
     */}}{{ end }}{{/*
-  */}}{{ end }}{{/*
-*/}}</code></pre>
+  */}}</code></pre>
+    {{ end }}
   {{ end }}
 {{ end }}
 
