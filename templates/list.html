@@ -6,7 +6,7 @@
   </header>
   <ul id="list">
     {{ range .Repos }}
-      <li><a href="{{ $.URL.RepoRoot . }}">
+      <li><a href="{{ $.URL.RepoRoot . "" }}">
         <div class="list-name">{{ .Name }}</div>
         {{ with .Description }}<div class="list-description">{{ . }}</div>{{ end }}
       </a></li>

@@ -14,8 +14,8 @@ type RepoRoot interface {
 	ReadmeHTML() template.HTML
 }
 
-func NewRepoRoot(cfg *config.Global, url url.Reverser, repo models.Repo, files []models.RepoFile, readme string, isReadmeHTML bool) RepoRoot {
-	return &repoRoot{NewRepoTree(cfg, url, repo, "/", true, false, false, files, ""), readme, isReadmeHTML}
+func NewRepoRoot(cfg *config.Global, url url.Reverser, repo models.Repo, branch string, branches []string, files []models.RepoFile, readme string, isReadmeHTML bool) RepoRoot {
+	return &repoRoot{NewRepoTree(cfg, url, repo, branch, branches, "/", true, false, false, files, ""), readme, isReadmeHTML}
 }
 
 type repoRoot struct {

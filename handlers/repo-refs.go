@@ -19,7 +19,20 @@ func NewRepoRefs(cfg *config.Global, url url.Reverser, repo models.Repo, consume
 }
 
 func (rr *RepoRefs) Serve(r Request) {
-	err := rr.consumer.Consume(r, ctx.NewRepoRefs(rr.cfg, rr.url, rr.repo))
+	branch := r.QueryString()["h"]
+
+	if branch == "" {
+		branch = rr.repo.DefaultBranch()
+	}
+
+	branches, err := rr.repo.Branches()
+
+	if err != nil {
+		r.Error(err)
+		return
+	}
+
+	err = rr.consumer.Consume(r, ctx.NewRepoRefs(rr.cfg, rr.url, rr.repo, branch, branches))
 
 	if err != nil {
 		r.Error(err)

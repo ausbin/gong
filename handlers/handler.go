@@ -10,6 +10,7 @@ type Request interface {
 	// If the registered path for this handler is /X/Y/, return /Z/ for
 	// Path() == /X/Y/Z/
 	Subtree() string
+	QueryString() map[string]string
 
 	// Actions
 	Redirect(string)

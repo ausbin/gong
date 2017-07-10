@@ -20,7 +20,20 @@ func NewRepoRoot(cfg *config.Global, url url.Reverser, repo models.Repo, consume
 }
 
 func (rr *RepoRoot) Serve(r Request) {
-	file, err := rr.repo.Find(rr.repo.DefaultBranch(), "/")
+	branch := r.QueryString()["h"]
+
+	if branch == "" {
+		branch = rr.repo.DefaultBranch()
+	}
+
+	branches, err := rr.repo.Branches()
+
+	if err != nil {
+		r.Error(err)
+		return
+	}
+
+	file, err := rr.repo.Find(branch, "/")
 
 	var files []models.RepoFile
 	if err == nil {
@@ -28,9 +41,9 @@ func (rr *RepoRoot) Serve(r Request) {
 	}
 
 	if err == nil {
-		readme, isReadmeHTML := rr.Readme()
-		ctx := ctx.NewRepoRoot(rr.cfg, rr.url, rr.repo, files, readme,
-			isReadmeHTML)
+		readme, isReadmeHTML := rr.Readme(branch)
+		ctx := ctx.NewRepoRoot(rr.cfg, rr.url, rr.repo, branch, branches,
+			files, readme, isReadmeHTML)
 		err = rr.consumer.Consume(r, ctx)
 	}
 
@@ -39,8 +52,8 @@ func (rr *RepoRoot) Serve(r Request) {
 	}
 }
 
-func (rr *RepoRoot) Readme() (content string, isReadmeHTML bool) {
-	readme := rr.repo.Readme(rr.repo.DefaultBranch())
+func (rr *RepoRoot) Readme(branch string) (content string, isReadmeHTML bool) {
+	readme := rr.repo.Readme(branch)
 
 	if readme != nil {
 		if readme.Type == models.RepoReadmeTypeMarkdown {

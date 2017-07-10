@@ -20,8 +20,8 @@ type RepoTree interface {
 	Blob() string
 }
 
-func NewRepoTree(cfg *config.Global, url url.Reverser, repo models.Repo, path string, isListing bool, isBinary bool, isImage bool, files []models.RepoFile, blob string) RepoTree {
-	return &repoTree{NewRepoGlobal(cfg, url, repo), path, NewPath(path), isListing, isBinary, isImage, files, blob}
+func NewRepoTree(cfg *config.Global, url url.Reverser, repo models.Repo, branch string, branches []string, path string, isListing bool, isBinary bool, isImage bool, files []models.RepoFile, blob string) RepoTree {
+	return &repoTree{NewRepoGlobal(cfg, url, repo, branch, branches), path, NewPath(path), isListing, isBinary, isImage, files, blob}
 }
 
 type repoTree struct {

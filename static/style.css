@@ -70,6 +70,23 @@ header nav a:hover {
     padding: 0;
 }
 
+#branch-form select {
+    background-color: transparent;
+    border: 1px solid #aaa;
+    display: inline-block;
+    margin: 8px auto 4px auto;
+    font-size: 14px;
+    text-align: center;
+}
+
+#branch-form option {
+    text-align: left;
+}
+
+#branch-form option[selected] {
+    font-weight: bold;
+}
+
 #container {
     margin: 0 auto;
     max-width: 720px;

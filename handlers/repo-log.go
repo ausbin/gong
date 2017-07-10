@@ -19,7 +19,20 @@ func NewRepoLog(cfg *config.Global, url url.Reverser, repo models.Repo, consumer
 }
 
 func (rl *RepoLog) Serve(r Request) {
-	err := rl.consumer.Consume(r, ctx.NewRepoLog(rl.cfg, rl.url, rl.repo))
+	branch := r.QueryString()["h"]
+
+	if branch == "" {
+		branch = rl.repo.DefaultBranch()
+	}
+
+	branches, err := rl.repo.Branches()
+
+	if err != nil {
+		r.Error(err)
+		return
+	}
+
+	err = rl.consumer.Consume(r, ctx.NewRepoLog(rl.cfg, rl.url, rl.repo, branch, branches))
 
 	if err != nil {
 		r.Error(err)

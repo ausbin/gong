@@ -14,6 +14,7 @@ type Repo interface {
 	Description() string
 	Path() string
 	DefaultBranch() string
+	Branches() ([]string, error)
 
 	// Actions
 	Open() error
@@ -42,6 +43,34 @@ func (r *repo) Open() error {
 	var err error
 	r.repo, err = git.OpenRepository(r.path)
 	return err
+}
+
+func (r *repo) Branches() (branches []string, err error) {
+	iterator, err := r.repo.NewBranchIterator(git.BranchLocal)
+
+	if err != nil {
+		return
+	}
+
+	err = iterator.ForEach(func(branch *git.Branch, _ git.BranchType) (err error) {
+		name, err := branch.Name()
+
+		if err != nil {
+			return
+		}
+
+		branches = append(branches, name)
+		return
+	})
+
+	iterator.Free()
+
+	// On error, return a nil slice
+	if err != nil {
+		branches = nil
+	}
+
+	return
 }
 
 func (r *repo) Find(branch, path string) (f RepoFile, err error) {

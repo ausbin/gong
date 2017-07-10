@@ -12,19 +12,25 @@ type RepoGlobal interface {
 	Global
 
 	Repo() models.Repo
+	Branch() string
+	Branches() []string
 }
 
-func NewRepoGlobal(cfg *config.Global, url url.Reverser, repo models.Repo) RepoGlobal {
-	return &repoGlobal{NewGlobal(cfg, url), repo}
+func NewRepoGlobal(cfg *config.Global, url url.Reverser, repo models.Repo, branch string, branches []string) RepoGlobal {
+	return &repoGlobal{NewGlobal(cfg, url), repo, branch, branches}
 }
 
 type repoGlobal struct {
 	Global
 
-	repo models.Repo
+	repo     models.Repo
+	branch   string
+	branches []string
 }
 
-func (r *repoGlobal) Repo() models.Repo { return r.repo }
+func (r *repoGlobal) Repo() models.Repo  { return r.repo }
+func (r *repoGlobal) Branch() string     { return r.branch }
+func (r *repoGlobal) Branches() []string { return r.branches }
 
 func (r *repoGlobal) Equals(other Global) bool {
 	otherGlobal, ok := other.(RepoGlobal)

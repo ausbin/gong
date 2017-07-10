@@ -20,8 +20,14 @@ func (rp *RepoPlain) Serve(r Request) {
 		return
 	}
 
+	branch := r.QueryString()["h"]
+
+	if branch == "" {
+		branch = rp.repo.DefaultBranch()
+	}
+
 	path := r.Subtree()
-	file, err := rp.repo.Find(rp.repo.DefaultBranch(), path)
+	file, err := rp.repo.Find(branch, path)
 
 	var blob []byte
 	if err == nil {

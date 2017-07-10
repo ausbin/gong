@@ -12,9 +12,9 @@ type Reverser interface {
 }
 
 type RepoReverser interface {
-	RepoRoot(repo models.Repo) string
-	RepoPlain(repo models.Repo, path string) string
-	RepoTree(repo models.Repo, path string, isDir bool) string
-	RepoLog(repo models.Repo) string
-	RepoRefs(repo models.Repo) string
+	RepoRoot(repo models.Repo, branch string) string
+	RepoPlain(repo models.Repo, branch string, path string) string
+	RepoTree(repo models.Repo, branch string, path string, isDir bool) string
+	RepoLog(repo models.Repo, branch string) string
+	RepoRefs(repo models.Repo, branch string) string
 }

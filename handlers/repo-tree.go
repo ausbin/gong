@@ -21,8 +21,21 @@ func NewRepoTree(cfg *config.Global, url url.Reverser, repo models.Repo, consume
 }
 
 func (rt *RepoTree) Serve(r Request) {
+	branch := r.QueryString()["h"]
+
+	if branch == "" {
+		branch = rt.repo.DefaultBranch()
+	}
+
+	branches, err := rt.repo.Branches()
+
+	if err != nil {
+		r.Error(err)
+		return
+	}
+
 	path := r.Subtree()
-	file, err := rt.repo.Find(rt.repo.DefaultBranch(), path)
+	file, err := rt.repo.Find(branch, path)
 
 	if err != nil {
 		r.Error(err)
@@ -63,7 +76,8 @@ func (rt *RepoTree) Serve(r Request) {
 	}
 
 	if err == nil {
-		ctx := ctx.NewRepoTree(rt.cfg, rt.url, rt.repo, path, file.IsDir(), isBinary, isImage, files, blob)
+		ctx := ctx.NewRepoTree(rt.cfg, rt.url, rt.repo, branch, branches, path,
+			file.IsDir(), isBinary, isImage, files, blob)
 		err = rt.consumer.Consume(r, ctx)
 	}
 

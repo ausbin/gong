@@ -61,20 +61,31 @@ func (m *main) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 type handlerRequest struct {
-	writer  http.ResponseWriter
-	request *http.Request
-	subtree string
-	written bool
+	writer      http.ResponseWriter
+	request     *http.Request
+	subtree     string
+	written     bool
+	querystring map[string]string
 }
 
 func newHandlerRequest(writer http.ResponseWriter, request *http.Request, registeredPath string) *handlerRequest {
 	subtree := request.URL.Path[len(registeredPath)-1:]
 
-	return &handlerRequest{writer, request, subtree, false}
+	// Build the querystring map. For now, discard all but the last value
+	// provided for a key
+	querystring := make(map[string]string)
+	for key, values := range request.URL.Query() {
+		if len(values) > 0 {
+			querystring[key] = values[len(values)-1]
+		}
+	}
+
+	return &handlerRequest{writer, request, subtree, false, querystring}
 }
 
-func (hr *handlerRequest) Path() string    { return hr.request.URL.Path }
-func (hr *handlerRequest) Subtree() string { return hr.subtree }
+func (hr *handlerRequest) Path() string                   { return hr.request.URL.Path }
+func (hr *handlerRequest) Subtree() string                { return hr.subtree }
+func (hr *handlerRequest) QueryString() map[string]string { return hr.querystring }
 func (hr *handlerRequest) Write(data []byte) (int, error) {
 	hr.written = true
 	return hr.writer.Write(data)
